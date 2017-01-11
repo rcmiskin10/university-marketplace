@@ -1,0 +1,758 @@
+
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="{% static 'img/favicon.ico' %}">
+
+    <title>Student Grounds</title>
+
+    <script src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="{% static 'js/jquery-ui.min.js' %}"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" media="all" />
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+   
+    <link href="{% static 'css/fonts.css' %}" rel="stylesheet">
+    <link href="{% static 'css/font-faces.css' %}" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+
+    <script src="https://npmcdn.com/masonry-layout@4.1/dist/masonry.pkgd.min.js"></script>
+    
+
+
+    
+
+    <script>
+$(document).bind('drop dragover', function (e) {
+     e.preventDefault();
+    });
+
+    </script>
+    
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-66872150-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+<style>
+#main{
+  padding-top:15px;
+}
+
+.ui-autocomplete {
+     z-index: 2000;
+}
+body {
+  background:#f4f4f4;
+  padding-top: 1.5em;
+}
+.panel{
+  border-radius: 0px;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+    font-family: 'Lato', sans-serif;
+    font-weight: normal;
+}
+
+
+#navSearch{
+  padding-top:1em;
+  display:none;
+  background-color:rgba(255,255,255,0.1);
+  border: .1em solid rgba(255,255,255,0.2); 
+  width:100%;
+  border-radius: .5em;
+  color:white;
+  
+
+}
+
+.header-top{
+  background-color:black;
+  color:white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  width: 100%;
+  height: 50px;
+  margin-bottom:10em;
+  
+  
+}
+.navbar{
+  display:none;
+}
+
+.dropdown-toggle .icon-bars-button{
+  display: inline-block;
+  vertical-align:middle;
+}
+.dropdown-toggle .icon-bar {
+  margin-bottom:2px;
+  display: block;
+  width: 22px;
+  height: 2px;
+  background-color: #cccccc;
+  border-radius: 1px;
+}
+ /* Custom, iPhone Retina */ 
+    @media only screen and (max-width : 995px), {
+        #middle{
+         width:60%;
+       }
+       
+       #left{
+        width:30%;
+       }
+       #right{
+        display:none;
+
+       }
+
+      
+    }
+.filter-drop{
+margin-top:1em;
+
+}
+
+.nav-drop-down{
+  background-color:black;
+  opacity:.9;
+  border-radius:0px;
+  top:3.25em;
+  
+  position:absolute;
+    
+  left:0;
+  
+}
+.nav-drop-down li a{
+  text-decoration:none;
+  color:white;
+}
+.left-inner-addon {
+    position: relative;
+}
+.left-inner-addon input {
+    padding-left: 22px;    
+}
+.left-inner-addon span {
+    position: absolute;
+    padding: 7px 12px;
+    pointer-events: none;
+}
+
+.right-inner-addon {
+    position: relative;
+}
+.right-inner-addon input {
+    padding-right: 30px;    
+}
+.right-inner-addon span {
+    position: absolute;
+    right: 0px;
+    padding: 7px 12px;
+    pointer-events: none;
+}
+.rating {
+    unicode-bidi:bidi-override;
+    direction:rtl;
+    font-size:1.0em;
+}
+.rating span.star {
+    font-family:FontAwesome;
+    font-weight:normal;
+    font-style:normal;
+    display:inline-block;
+}
+
+
+.rating span.star:before {
+    content:"\f006";
+    padding-right:5px;
+    color:#999999;
+}
+
+
+
+span.star.filled:before{ content:"\f005";color:#e3cf7a; }
+
+span.star.half-filled:before{ content:"\f089 ";color:#e3cf7a; }
+
+    </style>
+  </head>
+
+  <body>
+    
+{% include 'header.html' %}
+
+<!--start of pop ups -->
+
+
+<div class="modal fade" id="myModalProductInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+              <div style='padding-top:5%;'class="modal-dialog modal-lg" role="document">
+                <div style='border-radius:10px;'class="modal-content">
+                  
+  
+                  <div class="modal-body">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                     <div id='results'>
+
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+
+<div class="modal fade" id="myModalProduct" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+              <div style='width:75%;padding-top:5%;' class="modal-dialog" role="document">
+                <div style='border-radius:10px;' class="modal-content">
+                  
+                  <div class="modal-body">
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+                    <input form='add_product'style='display:none;' type='file' name='image' id='prod-image'>
+                    <form style='padding:2em;'id='add_product' method='POST' action='' name='example' enctype='multipart/form-data'> {% csrf_token %}
+
+                      <div style='color:red' id='add_product_error'>
+                      </div>
+
+                      
+                        <div class='row'>
+                          <div class='col-lg-4 col-md-4'>
+                      
+                         <a id='prod-image-click'style='text-decoration:none;'href='#'>
+                            <div style='padding:.1em;border-radius:.75em;text-align:center;background-color:#F9F9F9'class='back-color'>
+                              <img style='padding:.5em;display:none;'class=' img-rounded' id='test-img' src='' width="75%" height="75%" />
+                              <i id='icon-img' style='font-size:9.5em;'class="fa fa-picture-o" aria-hidden="true"></i><br>
+                              
+                              <p style='font-weight:bold;'>Add photo</p>
+                            </div>
+                          
+                            <br><br>
+                            
+                            
+                           </a> 
+                        
+                          </div>
+
+                          <div class='col-lg-8 col-md-8'>
+
+                            <input style='border-radius:.75em;height:3em;background-color:#F9F9F9;'type='text' class='form-control' name='title' placeholder='*Title' id='title'><br>
+                            <div class="left-inner-addon">
+                                <span style='padding-top:.8em;color:#8C8C8C;'>$</span>
+                                <input style='border-radius:.75em;height:3em; background-color:#F9F9F9;' type="text" class="form-control" name='price' id='price' />
+                            </div><br>
+                          <div class='row'>
+                            <div class='col-lg-6 col-md-6'>
+                                <select style='border-radius:.75em;height:3em; color:#8C8C8C; background-color:#F9F9F9;'name='category' class="form-control" id="category">
+                                  <option value="" selected>*Category</option>
+                                  <option>Textbooks</option>
+                                  <option>Apparel</option>
+                                  <option>Electronics</option>
+                                  <option>Furniture</option>
+                                  <option>Sublet</option>
+                                  <option>Tutors</option>
+                                  <option>Other</option>
+                                </select>
+                              </div>
+                              
+                              <div class='col-lg-6 col-md-6'>
+                             
+                              <select style='border-radius:.75em;height:3em;color:#8C8C8C;background-color:#F9F9F9;' name='condition' class="form-control" id="condition">
+                                    <option value="" selected>*Condition</option>
+                                    <option>New</option>
+                                    <option>Used</option>   
+                              </select>
+                            </div>
+                          </div>
+
+                          </div>
+
+                          <div class='col-lg-12 col-md-12'>
+                           
+                            
+  <textarea placeholder='*Description'style='background-color:#F9F9F9;'class="form-control" rows="5" name='description' id="description"></textarea>
+  <br>
+                          </div>
+
+                      </div><!--div class row-->
+
+                      <div style='text-align:center;'>
+                      <button  class='btn btn-primary btn-lg' type='submit'>Add Item</button>
+                    </div>
+                    </form>
+
+
+                    
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+
+            <!--end of pop ups-->
+    {% block content %}
+    
+
+  
+  {% endblock %}
+
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+        
+        {% block jquery %}
+        
+        {% endblock %}
+      });
+      
+ 
+
+
+      
+    </script>
+
+<script>
+
+function addProductReadURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        
+        reader.onload = function (e) {
+            $('#test-img').attr('src', e.target.result);
+        }
+        
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+    
+  $("#prod-image").change(function(){
+    if (this.files[0].size >5000000){
+    $('#add_product_error').html($("<div class='alert alert-danger'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Please</strong> make sure your image is less than 5MB</div>")).fadeIn(2000).fadeOut(3000);
+  
+  $('#prod-image').val('');
+  $('#test-img').hide();
+      $('#icon-img').show();
+    }
+    else{
+      $('#test-img').show();
+      $('#icon-img').hide();
+      addProductReadURL(this);
+    }
+  });
+
+
+$('#prod-image-click').on('click', function(e){
+        e.preventDefault();
+        $('#prod-image')[0].click();
+    });
+
+
+
+
+
+    
+function getRatingCount() {
+      $.ajax({
+          type: "GET",
+          url: "/request_user_rating/",
+          success: function(data){
+          var rating = data.rating;
+          if (rating == '5.0'){
+              $('#rating-list').html('<i style="padding-left:1.3em;font-size:1.25em;color:grey;"class="fa fa-thumbs-up" aria-hidden="true"></i><span style="padding-left:.75em;" class="rating"><i style="font-size:.75em;color:grey;">(0.5)</i><span id="5" class="star filled"></span><span id="4" class="star filled"></span><span id="3" class="star filled"></span><span id="2" class="star filled"></span><span id="1" class="star filled"></span></span>')
+            }
+            if (rating == '4.5'){
+              $('#rating-list').html('<i style="padding-left:1.3em;font-size:1.25em;color:grey;"class="fa fa-thumbs-up" aria-hidden="true"></i><span style="padding-left:.75em;" class="rating"><i style="font-size:.75em;color:grey;">(5.4)</i><span id="5" class="star half-filled"></span><span id="4" class="star filled"></span><span id="3" class="star filled"></span><span id="2" class="star filled"></span><span id="1" class="star filled"></span></span>')
+            }
+            if (rating == '4.0'){
+              $('#rating-list').html('<i style="padding-left:1.3em;font-size:1.25em;color:grey;"class="fa fa-thumbs-up" aria-hidden="true"></i><span style="padding-left:.75em;"class="rating"><i style="font-size:.75em;color:grey;">(0.4)</i><span id="5" class="star"></span><span id="4" class="star filled"></span><span id="3" class="star filled"></span><span id="2" class="star filled"></span><span id="1" class="star filled"></span></span>')
+            }
+
+            if (rating == '3.5'){
+              $('#rating-list').html('<i style="padding-left:1.3em;font-size:1.25em;color:grey;"class="fa fa-thumbs-up" aria-hidden="true"></i><span style="padding-left:.75em;"class="rating"><i style="font-size:.75em;color:grey;">(5.3)</i><span id="5" class="star"></span><span id="4" class="star half-filled"></span><span id="3" class="star filled"></span><span id="2" class="star filled"></span><span id="1" class="star filled"></span></span>')
+
+            }
+
+            if (rating == '3.0'){
+              $('#rating-list').html('<i style="padding-left:1.3em;font-size:1.25em;color:grey;"class="fa fa-thumbs-up" aria-hidden="true"></i><span style="padding-left:.75em;"class="rating"><i style="font-size:.75em;color:grey;">(0.3)</i><span id="5" class="star "></span><span id="4" class="star "></span><span id="3" class="star filled"></span><span id="2" class="star filled"></span><span id="1" class="star filled"></span></span>')
+
+            }
+            if (rating == '2.5'){
+              $('#rating-list').html('<i style="padding-left:1.3em;font-size:1.25em;color:grey;"class="fa fa-thumbs-up" aria-hidden="true"></i><span style="padding-left:.75em;"class="rating"><i style="font-size:.75em;color:grey;">(5.2)</i><span id="5" class="star "></span><span id="4" class="star "></span><span id="3" class="star half-filled"></span><span id="2" class="star filled"></span><span id="1" class="star filled"></span></span>')
+            }
+            if (rating == '2.0'){
+              $('#rating-list').html('<i style="padding-left:1.3em;font-size:1.25em;color:grey;"class="fa fa-thumbs-up" aria-hidden="true"></i><span style="padding-left:.75em;"class="rating"><i style="font-size:.75em;color:grey;">(0.2)</i><span id="5" class="star "></span><span id="4" class="star "></span><span id="3" class="star"></span><span id="2" class="star filled"></span><span id="1" class="star filled"></span></span>')
+            }
+
+            if (rating == '1.5'){
+              $('#rating-list').html('<i style="padding-left:1.3em;font-size:1.25em;color:grey;"class="fa fa-thumbs-up" aria-hidden="true"></i><span style="padding-left:.75em;"class="rating"><i style="font-size:.75em;color:grey;">(5.1)</i><span id="5" class="star "></span><span id="4" class="star "></span><span id="3" class="star"></span><span id="2" class="star half-filled"></span><span id="1" class="star filled"></span></span>')
+            }
+
+            if (rating == '1.0'){
+              $('#rating-list').html('<i style="padding-left:1.3em;font-size:1.25em;color:grey;"class="fa fa-thumbs-up" aria-hidden="true"></i><span style="padding-left:.75em;"class="rating"><i style="font-size:.75em;color:grey;">(0.1)</i><span id="5" class="star "></span><span id="4" class="star "></span><span id="3" class="star"></span><span id="2" class="star"></span><span id="1" class="star filled"></span></span>')
+            }
+
+            if (rating == '0'){
+              $('#rating-list').html('<i style="padding-left:1.3em;font-size:1.25em;color:grey;"class="fa fa-thumbs-up" aria-hidden="true"></i><span style="padding-left:.75em;"class="rating"><i style="font-size:.75em;color:grey;">(0)</i><span id="5" class="star "></span><span id="4" class="star "></span><span id="3" class="star"></span><span id="2" class="star"></span><span id="1" class="star"></span></span>')
+            }
+
+          },
+          error: function(rs, e) {
+            console.log(rs);
+            console.log(e);
+          }
+        })
+      
+
+    }
+
+    $(document).ready(function(){
+      getRatingCount();
+      
+      
+    })
+
+$(document).ready(function(){
+      getMessageCount()
+      setTimeout(getMessageCount, 5000); // 5 minutes
+      
+    })
+function getMessageCount() {
+      $.ajax({
+          type: "GET",
+          url: "/messages/count/",
+          success: function(data){
+            
+            if (data.count != 0) {
+             $(".badge-notify").css('background', '#385c7d');
+      
+              $(".badge-notify").html(data.count);
+             }
+
+          },
+          error: function(rs, e) {
+            console.log(rs);
+            console.log(e);
+          }
+        })
+      
+
+    }
+
+$(document).ready(function(){
+ if ($(window).width() < 995) {
+     
+     $('#user-name').show();
+     $('#img-caret').show();
+     $('#add-prod').show();
+     $('#u-name').hide();
+     $('#right').hide();
+     $('#middle-logo').hide();
+     $(document).on('scroll', function() {
+    if($(this).scrollTop()>=$('#main-title').position().top){
+       $('#middle-logo').hide();
+       $('#navSearch').show();
+    }
+    else{
+      $('#user-name').show();
+      
+     $('#u-name').hide();
+     $('#right').hide();
+      $('#middle-logo').hide();
+      $('#navSearch').hide();
+    }
+});
+  }
+ else {
+   
+    $('#user-name').show();
+    $('#middle-logo').show();
+
+    $('#u-name').show();
+    $('#right').show();
+    $(document).on('scroll', function() {
+    if($(this).scrollTop()>=$('#main-title').position().top){
+       $('#middle-logo').hide();
+       $('#navSearch').show();
+    }
+    else{
+      $('#middle-logo').show();
+      $('#navSearch').hide();
+    }
+});
+
+ }
+ });
+
+ $(window).resize(function() {
+  if ($(window).width() < 995) {
+     
+         $('#user-name').show();
+         $('#img-caret').show();
+         $('#add-prod').show();
+         $('#u-name').hide();
+         $('#middle-logo').hide();
+         $('#right').hide();
+        if($(this).scrollTop()>=$('#main-title').position().top){
+           
+           $('#navSearch').show();
+        }
+        else{
+          $('#user-name').show();
+         $('#img-caret').show();
+
+         $('#u-name').hide();
+          $('#right').hide();
+          $('#navSearch').hide();
+        }
+
+      }
+else {
+  $('#img-caret').hide();
+    $('#user-name').show();
+    $('#u-name').show();
+    $('#right').show();
+    $('#add-prod').hide();
+    if($(this).scrollTop()>=$('#main-title').position().top){
+       $('#middle-logo').hide();
+       $('#navSearch').show();
+    }
+    else{
+      $('#middle-logo').show();
+      $('#navSearch').hide();
+    }
+
+ }
+});
+ 
+
+ $('form').live('submit', function(event) {
+
+    event.preventDefault();
+    
+    var $form = $(this);
+    var id = $form.attr('id');
+    var formData = $form.serialize();
+
+      if ($form.attr("id") == "navSearchForm"){
+      this.submit();      
+      }
+
+      if ($form.attr("id") == "topSearchForm"){
+        this.submit();  
+
+      }
+
+      if ($(this).attr('id').indexOf('user_compose') > -1 ){
+          
+          
+          $.ajax({
+              type:'POST',
+              url: "/compose_message/",
+              dataType: "json",
+              data:formData,
+             
+              success: function (json) {
+                
+                 
+                var id = json.user_id;
+                   
+                $("#ajax-message").append("<li style='padding-left: 40%; list-style-type: none;' class='text-right '><div style='background-color:#c4daef;margin: 0px;padding: 1em;color:#727274;'class='well'>"+json.body.replace(/\n/g,'<br>')+"</div><small style='color:grey;'>"+json.sent+"</small></li><br>");
+                  
+                  $('#convo').animate({scrollTop: $('#convo').prop("scrollHeight")});
+                  $('#user_compose_'+id)[0].reset()
+                 
+                 
+
+              },
+              error: function(data) {
+                $(".syl-error").html("All fields are required. Make sure your date is actually a DATE!").fadeIn(2000).fadeOut(6000);
+                  
+              }
+          });
+          }
+
+    if ($form.attr("id") == "add_product"){
+    
+    var formData = new FormData(this);
+
+    $.ajax({
+        type:'POST',
+        url: "/" + {{ request.user.university.id }} + "/home/add_product/",
+        data:formData,
+        cache:false,
+        contentType: false,
+        processData: false,
+        
+        
+        success: function (json) {
+          var $response = json.response
+            if ($response){  
+            
+                $('#myModalProduct').modal('hide');
+                $("#add_product_success").html($("<div class='alert alert-success'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Success!</strong> You added an item! Check your Profile page.</div>")).fadeIn(2000)
+                
+                $('#add_product')[0].reset();
+                $('#test-img').hide();
+                $('#icon-img').show();
+            
+             }
+            else{
+              var obj = jQuery.parseJSON(json.errors);
+              $.each(obj, function(key,value) {
+              
+              $.each(value, function(k,v){
+                if (v.message){
+                  $("#add_product_error").html($("<div class='alert alert-danger'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>"+v.message+"</div>"));
+                    }
+                    
+                  });
+                });  
+             
+                  
+                  $('#add_product')[0].reset();
+             
+              }
+
+        },
+        error: function(data) {
+          $(".syl-error").html("All fields are required. Make sure your date is actually a DATE!").fadeIn(2000).fadeOut(6000);
+            
+        }
+    });
+    }
+  });
+
+
+$('#myModalProductInfo').on('hidden.bs.modal', function () {
+document.location.reload();
+})
+
+/*messaging scripts*/
+
+
+$(document).ready(function() {
+  $('#convo').animate({scrollTop: $('#convo').prop("scrollHeight")});
+});
+
+$(document).ready(function() {
+  $('#comment').keydown(function() {
+
+  var message = $("#comment").val();
+  if (event.keyCode == 13 && !event.shiftKey) {
+  if (message == "") {
+
+  } else {
+  $('#user_compose_{{ user.id }}').submit();
+
+  }
+$("#comment").val('');
+  return false;
+}
+});
+});
+
+
+  
+$(function(){
+  $('.delete-convo').click(function(){
+
+    $.ajax({
+      type: "POST",
+      url:"/{{ school.id }}/home/messaging/thread/{{ user.id }}/delete/",
+      data: {
+
+      },
+      success: function (json) {
+       window.location.href = "/{{ school.id }}/home/messaging/all/{{ request.user.id }}/";
+      },
+      dataType: 'html'
+    });
+  });
+});
+
+
+/*csrf*/
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+var csrftoken = getCookie('csrftoken');
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+
+}
+
+function sameOrigin(url) {
+    // test that a given url is a same-origin URL
+    // url could be relative or scheme relative or absolute
+    var host = document.location.host; // host + port
+    var protocol = document.location.protocol;
+    var sr_origin = '//' + host;
+    var origin = protocol + sr_origin;
+    // Allow absolute or scheme relative URLs to same origin
+    return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+        (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+        // or any other URL that isn't scheme relative or absolute i.e relative.
+        !(/^(\/\/|http:|https:).*/.test(url));
+}
+
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+            // Send the token to same-origin, relative URLs only.
+            // Send the token only if the method warrants CSRF protection
+            // Using the CSRFToken value acquired earlier
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+  </script>
+    
+  </body>
+  
+</html>
+

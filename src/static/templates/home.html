@@ -1,0 +1,684 @@
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    
+
+    <title>Student Grounds</title>
+
+    <!-- Bootstrap core CSS -->
+    <script src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="{% static 'js/jquery-ui.min.js' %}"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" media="all" />
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <link href="{% static 'css/font-awesome.css' %}" rel="stylesheet">
+    <!-- Custom styles for this template -->
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+     
+     <link href='https://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+
+<script>
+
+
+
+</script>
+      <style>
+
+#vid-background{
+  width: 100%; /* width needs to be set to 100% */
+  height: 100%; /* height needs to be set to 100% */
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: -1;
+}
+.content-section-a {
+    padding-top: 50px;
+    background-color: #f8f8f8;
+}
+
+
+.content-section-b{
+
+}
+
+.content-section-c {
+    
+    background-color: #f8f8f8;
+}
+
+.content-section-d {
+    
+    background-color: white;
+    padding-bottom:40px;
+}
+
+.img-center{
+  margin: 0 auto;
+}
+.circle
+{
+width:50%;
+height:auto;
+border-radius:50%;
+font-size:15px;
+color:black;
+
+text-align:center;
+border:solid 1px;
+margin: 0 auto;
+}
+
+
+.content-section-e {
+    
+    background-color: white;
+}
+.text-center{
+  padding-bottom:40px;
+}
+.section-heading {
+    margin-bottom: 30px;
+}
+
+.section-heading-spacer {
+    
+    width: 200px;
+    border-top: 3px solid #e7e7e7;
+}
+
+
+
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+}
+#hidden-reg{
+  display:none;
+}
+
+
+.top{
+
+  overflow: hidden;
+  
+  position: relative;
+  
+  
+  width:100%;
+  height:700px;
+}
+
+.navbar{
+  -webkit-transform: translateZ(0);
+  border-bottom:none;
+  color:black;
+  background-color:transparent;
+  }  
+.collapse .navbar-collapse{
+  background-color:black;
+}
+@media (max-width: 767px) {
+  
+      .navbar {
+        background-color:black;
+      }
+}
+.col-sm-4{
+  
+  background:#B5BBBD ;
+  font-family: 'Raleway',sans-serif;
+  
+  opacity: 0.90;
+  
+  border-radius: 10px;
+  text-align:center;
+  
+}
+
+
+.alert{
+  
+  text-align:center;
+}
+
+
+.modal .modal-content {
+  opacity: .9;
+}
+
+
+
+      </style>
+  
+  </head>
+
+  <body>
+
+   {% include 'navbar.html' %}
+
+<div class="modal fade" id="myModalLogin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h3 style='text-align:center;' class="modal-title" id="myModalLabel">Please sign in</h3>
+                  </div>
+                  <div class="modal-body">
+                    
+                     <div id="login_error_message"></div>
+        
+    
+    
+        <form id='login' class="form-signin" method="POST" action="/auth_login/">{% csrf_token %}
+        
+        <label for="inputEmail" class="sr-only">Email address</label>
+        <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Email address" required autofocus>
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
+        <div class="checkbox">
+          <label style='color:black;'>
+            <input type="checkbox" value="remember-me"> Remember me
+          </label>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+      </form>
+      <p style='color:black;'>Forgot your password? <a href='/password/reset/'>Reset it!</a></p>
+    
+                   
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+
+<div class="modal fade" id="myModalSignup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h3 style='text-align:center;'class="modal-title" id="myModalLabel">Register for a free account <br><small>We're only available to Brandeis University and UMass Amherst</small></h3>
+                  </div>
+                  <div class="modal-body">
+
+      
+                    <div id='error_message'></div>
+                    
+                    
+                      <form id='registration' method="POST" action="">
+                            {% csrf_token %}
+                            {{ form.email|as_crispy_field }}
+                            <div style='text-align:center;'id='uni-search'></div>
+                            <div id='hidden-reg'>
+                              {{ form.username|as_crispy_field }}
+                              {{ form.first_name|as_crispy_field }}
+                              {{ form.last_name|as_crispy_field }}
+                              {{ form.password1|as_crispy_field }}
+                              {{ form.password2|as_crispy_field }}
+                              {{ form.referral|as_crispy_field }}
+                              <div style='text-align:center;'> <button class='btn btn-lg' type='submit'>Register</button></div>
+                            </div>
+
+                      </form>
+                  
+              <small>By clicking Register, you agree to our <a href='/terms/'>Terms</a> and that you have read our <a href='/privacy/'>Privacy Policy</a>.</small>
+                     
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+
+<div class='top'>
+
+  <div style='padding-top:4em;font-size:4em;color:white;text-align:center;' class='col-lg-6 col-lg-offset-3'>
+University Marketplace
+</div>
+
+ <video id='vid-background'style='object-fit:fill;'autoplay='autoplay' loop='loop' width="100%" height="auto" name="Video Name" src="{% static 'img/bg-vid.mov' %}"></video>
+ 
+ <div id='mobile-back' style='left: 0;top: 0;width:100%;height:100%;background-color:#385c7d;display:none;position: absolute;z-index:-1;'>
+
+ </div>
+
+
+  
+</div>
+   
+
+<div id='anchor'></div>
+
+<div class="content-section-a">
+
+        <div class="container">
+          
+            <div class="row">
+
+                <div style='padding-bottom:40px;' class="col-lg-5 col-sm-6">
+                    <hr>
+                    
+                    <h2 class="section-heading">S2S - Student to Student Transactions</h2>
+                    <p class="lead">Student Grounds puts the money back into the student’s pocket by matching buyers and sellers to carry out campus based, student to student transactions (S2S) that satisfy all aspects of college life. 
+                    </p>
+                </div>
+                <div style='padding-bottom:40px;'class="col-lg-5 col-lg-offset-2 col-sm-6">
+                  
+                    <img class="img-responsive" src="{% static 'img/desk-photo.jpg' %}" alt="">
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.content-section-a -->
+
+<div class="content-section-b">
+
+        <div class="container">
+          
+            <div class="row">
+
+                
+                <div style='padding-bottom:40px; padding-top:40px;'class="col-lg-5 col-sm-6">
+                  
+                    <img class="img-responsive" src="{% static 'img/car-min.jpg' %}" alt="">
+                </div>
+
+                <div style='padding-bottom:40px;padding-top:40px;' class="col-lg-5 col-lg-offset-2 col-sm-6">
+                    <hr>
+                    
+                    <h2 class="section-heading">Services</h2>
+                    <p class="lead">Have a service you’d like to offer? Make money for it. Our unique matching system links consumer with supplier to facilitate quick, cost effective services on campus and beyond. Performance reviews ensure that service providers are held to the highest standards. 
+
+                    </p>
+                </div>
+
+
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.content-section-b -->  
+
+
+
+<div class="content-section-d">
+<div class='container'>
+         <div style='padding-top:40px;'class="row">
+          <h2 style='text-align:center;' class="section-heading">Get Started Now</h2>
+            <div style='text-align:center;'class="col-sm-3">
+                <img class="img-circle img-responsive img-center" src="{% static 'img/number-1.png' %}" alt="">
+                <h2 class="section-heading">Sign Up</h2>
+                <p class='lead'>Register using your university email address</p>
+            </div>
+            <div style='text-align:center;'class="col-sm-3">
+                <img class="img-circle img-responsive img-center" src="{% static 'img/number-2.png' %}" alt="">
+                <h2 class="section-heading">Create</h2>
+                <p class='lead'>Create your services profile to find potential opportunities and providers</p>
+            </div>
+            <div style='text-align:center;'class="col-sm-3">
+                <img class="img-circle img-responsive img-center" src="{% static 'img/number-3.png' %}" alt="">
+                <h2 class="section-heading">Add</h2>
+                <p class='lead'>Add any product to your university marketplace to make quick easy money</p>
+            </div>
+            <div style='text-align:center;'class="col-sm-3">
+                <img class="img-circle img-responsive img-center" src="{% static 'img/number-4.png' %}" alt="">
+                <h2 class="section-heading">Browse</h2>
+                <p class='lead'>View and buy products and services by messaging the owner</p>
+            </div>
+
+        </div>
+        <!-- /.row -->
+        
+      </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.content-section-d -->
+<div class="content-section-c">
+
+        <div class="container">
+          
+            <div class="row">
+
+                <div style='padding-bottom:40px;padding-top:40px;' class="col-lg-5 col-sm-6">
+                    <hr>
+                    
+                    <h2 class="section-heading">Finally Save Real Money on Textbooks</h2>
+                    <p class="lead">College students spend thousands on their education. Students wait weeks until they receive their textbooks. SG eliminates these problems through S2S transactions, saving money and valuable time through eliminating the third party transaction.
+
+                    </p>
+                </div>
+                <div style='padding-bottom:40px; padding-top:40px;'class="col-lg-5 col-lg-offset-2 col-sm-6">
+                  
+                    <img class="img-responsive" src="{% static 'img/text-min.jpg' %}" alt="">
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.content-section-a -->
+<div class="content-section-e">
+
+        <div class="container">
+          
+            <div class="row">
+
+                
+                <div style='padding-bottom:40px; padding-top:40px;'class="col-lg-5 col-sm-6">
+                  
+                    <img height='325' width='325'class="img-responsive" src="{% static 'img/recycling.png' %}" alt="">
+                </div>
+
+                <div style='padding-bottom:40px;padding-top:40px;' class="col-lg-5 col-lg-offset-2 col-sm-6">
+                    <hr>
+                    
+                    <h2 class="section-heading">Sustainable Transactions</h2>
+                    <p class="lead">Student Grounds is able to eliminate shipping, transportation, packaging, and all the waste and CO2 emissions that go into shipping products across the world. By effectively cutting out the middleman we are able to put more money into the hands of the consumer while helping create more sustainable transactions. 
+                    </p>
+                </div>
+
+
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.content-section-c -->
+
+
+
+
+<div style='padding:40px;text-align:center;'class='footer'>
+  <div id='contact_message'></div>
+  <h2>Message Us!</h2><br>
+  <div class='container'>
+ <div class='row'>
+<form id='contact_us' method='POST' action="/contact_us/" >{% csrf_token %}
+    <div class='col-lg-4'>
+      <label for="name" class="sr-only">Name</label>
+        <input type="text" id="name" name="name" class="form-control" placeholder="Name"  >
+    </div>
+
+    <div class='col-lg-4'>
+ <label for="name" class="sr-only">Email</label>
+        <input type="text" id="email" name="email" class="form-control" placeholder="Email" >
+    </div>
+
+    <div class='col-lg-4'>
+ <label for="name" class="sr-only">Phone</label>
+        <input type="text" id="phone" name="phone" class="form-control" placeholder="Phone" >
+    </div>
+
+ </div>
+<br><br>
+ <div class='col-lg-12'>
+  <textarea class="form-control" name='body' id='body' placeholder="What's Up ?"></textarea>
+ </div>
+ <br><br><br><br>
+ <input class="btn btn-lg btn-primary " value='Send'type="submit">
+</form>
+
+</div>
+
+<br><br>
+
+<div class='social'>
+<a href='https://www.facebook.com/studentgrounds/' target="_blank"><i style='color:#3b5998;font-size:5em;'class="fa fa-facebook-square" aria-hidden="true"></i></a>
+
+<a href='https://twitter.com/StudentGrounds' target="_blank"><i style='margin-left:30px;color:#1da1f2;font-size:5em;' class="fa fa-twitter-square" aria-hidden="true"></i></a>
+
+<a href='https://www.linkedin.com/company/10059860' target="_blank"><i style='margin-left:30px;color:#4875B4;font-size:5em;' class="fa fa-linkedin-square" aria-hidden="true"></i></a>
+
+<a href='https://www.instagram.com/studentgrounds/' target="_blank"><i style='margin-left:30px;color:#4E433C;font-size:5em;' class="fa fa-instagram" aria-hidden="true"></i></a>
+
+</div>
+<br><br>
+
+<p>Student Grounds Inc. &copy; 2016
+  </div>
+
+<script>
+
+$(document).ready(function(){
+ if ($(window).width() < 500) {
+     
+     $('#vid-background').hide();
+     $('#mobile-back').show();
+     
+  }
+ 
+ });
+
+$(window).scroll(function (event) {
+    var scroll = $(window).scrollTop();
+    
+    if (!scroll){
+      $('.navbar').css('background-color', 'transparent');
+    }
+    else{
+      $('.navbar').css('background-color', 'black');
+      
+    }
+});
+
+
+$('form').live('submit', function(event) {
+
+    event.preventDefault();
+    
+    var $form = $(this);
+    var id = $form.attr('id');
+    var formData = $form.serialize();
+if ($form.attr("id") == "contact_us"){
+    
+    
+    $.ajax({
+        type:'POST',
+        url: "/contact_us/",
+        dataType: "json",
+        data:formData,
+        
+      
+        success: function (json) {
+          var $success = json.success
+          
+          if ($success == 'True'){
+            $("#contact_message").html($("<div class='alert alert-success' role='alert'>Thank you for your interest. We will be in touch shortly!</div>"));
+                $('#contact_us')[0].reset();
+          }
+          if ($success == 'False'){ 
+          
+                $("#contact_message").html($("<div class='alert alert-danger' role='alert'>All fields required!</div>"));
+                  $('#contact_us')[0].reset();
+              }
+                  
+
+        },
+        error: function(data) {
+          $(".syl-error").html("All fields are required. Make sure your date is actually a DATE!").fadeIn(2000).fadeOut(6000);
+            
+        }
+    });
+    }
+
+if ($form.attr("id") == "login"){
+    
+    
+    $.ajax({
+        type:'POST',
+        url: "/auth_login/",
+        dataType: "json",
+        data:formData,
+        
+        
+        
+        success: function (json) {
+          var $success = json.success
+          
+          if ($success == 'True'){
+            document.location.href = json.url;
+          }
+          if ($success == 'False'){ 
+          
+                $("#login_error_message").html($("<div class='alert alert-danger' role='alert'>Please try again!</div>"));
+                $('#login')[0].reset();
+              }
+                  
+
+        },
+        error: function(data) {
+          $(".syl-error").html("All fields are required. Make sure your date is actually a DATE!").fadeIn(2000).fadeOut(6000);
+            
+        }
+    });
+    }
+
+if ($form.attr("id") == "registration"){
+ 
+    $.ajax({
+        type:'POST',
+        url: "/registration/",
+        dataType: "json",
+        data:formData,
+
+        success: function (json) {
+          var $success = json.success
+          if ($success){
+            document.location.href = json.url ;
+          }
+          else{ 
+          var obj = jQuery.parseJSON(json.errors);
+          $.each(obj, function(key,value) {
+            
+            $.each(value, function(k,v){
+              if (v.message){
+                $("#error_message").html($("<div class='alert alert-danger' role='alert'>"+v.message+"</div>"));
+              }
+              
+            });
+          });  
+           
+                
+                $('#registration')[0].reset();
+             }
+
+        },
+        error: function(data) {
+          $(".syl-error").html("All fields are required. Make sure your date is actually a DATE!").fadeIn(2000).fadeOut(6000);
+            
+        }
+    });
+    }
+
+
+});
+
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+var csrftoken = getCookie('csrftoken');
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+
+}
+
+function sameOrigin(url) {
+    // test that a given url is a same-origin URL
+    // url could be relative or scheme relative or absolute
+    var host = document.location.host; // host + port
+    var protocol = document.location.protocol;
+    var sr_origin = '//' + host;
+    var origin = protocol + sr_origin;
+    // Allow absolute or scheme relative URLs to same origin
+    return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+        (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+        // or any other URL that isn't scheme relative or absolute i.e relative.
+        !(/^(\/\/|http:|https:).*/.test(url));
+}
+
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+            // Send the token to same-origin, relative URLs only.
+            // Send the token only if the method warrants CSRF protection
+            // Using the CSRFToken value acquired earlier
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+
+$('#university').keyup(function() {
+    var dInput = this.value;
+    
+  
+    $.ajax({
+      type: "POST",
+      url:"/email/search/",
+      data: {
+        'search_text' : $('#university').val(),
+        
+
+      },
+      success: searchSuccess,
+      dataType: 'html'
+    });
+  
+
+
+function searchSuccess(data, textStatus, jqXHR)
+{
+  
+  $('#uni-search').html(data);
+  
+  $('#uni-search').show();
+  $('#hidden-reg').show();
+
+}
+    
+});
+
+</script>
+  </body>
+  
+</html>
+

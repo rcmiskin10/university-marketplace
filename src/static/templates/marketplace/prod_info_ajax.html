@@ -1,0 +1,478 @@
+{% load staticfiles %}	
+
+<style>
+
+
+.rating {
+    unicode-bidi:bidi-override;
+    direction:rtl;
+    font-size:1.25em;
+}
+.rating span.star {
+    font-family:FontAwesome;
+    font-weight:normal;
+    font-style:normal;
+    display:inline-block;
+}
+
+
+.rating span.star:before {
+    content:"\f006";
+    padding-right:5px;
+    color:#999999;
+}
+
+
+
+span.star.filled:before{ content:"\f005";color:#e3cf7a; }
+
+span.star.half-filled:before{ content:"\f089 ";color:#e3cf7a; }
+
+#edit-product{
+  display:none;
+}
+</style>
+
+<div id='all-product'>
+<div style='padding:20px;'class='row'>
+
+<!--product img-->
+<div class='col-lg-5 col-md-5 col-sm-6 col-xs-12'>
+<div class="image-wrapper-modal">
+{% if product.image %}
+<img src='{{ product.image.url }}' width="100%" height="100%" /><br>
+{% endif %}
+
+{% if not product.image %}
+ <div style='text-align:center;background-color:#D2D2D2;height:100%;'>
+                <span style='padding-top:.5em;font-size:9em;'class="fa-stack fa-lg"><i style='color:#B7B7B7;'class="fa fa-camera fa-stack-1x"></i><i style='opacity:.7;color:#D9D9D9;'class="fa fa-ban fa-stack-2x text-danger"></i>
+                </span>
+              </div>
+{% endif %}
+
+<p>${{ product.price|truncatechars:22 }}</p>
+
+</div><!--img wrapper-->
+
+
+</div><!--end of product img-->
+
+
+
+<div style='word-wrap:break-word' class='col-lg-7 col-md-7 col-sm-6 col-xs-12'><!-- product info-->
+
+
+<h3 style='color:#545454;padding-top:0px;margin-top:0px;'>{{ product.title|upper}} </h3> 
+
+
+<h4><b style='color:#545454'>Condition:</b> <i style='color:#969696;'>{{ product.condition }}</i></h4>
+<h4><b style='color:#545454'>Posted:</b> <i style='color:#969696;'>{{ product.timestamp|timesince }} ago</i></h4>
+<h4 style='line-height:1.5em'><b style='color:#545454'>Full Description:</b> <i style='color:#969696;'>{{ product.description }} </i></h4>
+<br>
+<br>
+
+{% if product.owner == request.user %}<a id='edit-link'style='font-size:1.5em;text-decoration:none;'href='#'>EDIT <i class="fa fa-pencil" aria-hidden="true"></i></a>{% endif %}
+
+<br><br>
+<div style='vertical-align:middle;background-color:#f4f4f4;border-radius:10px;padding:10px;'class='well'><!--well-->
+
+
+
+  <div class="media">
+  <div class="media-left">
+   <a style='text-decoration:none;'href='#'>
+    {% for pic in product.owner.userpicture_set.all %}          
+            {% if pic.image %}    
+              <img class='img-circle'src='{{ pic.image.url }}' width="50" height="50" />   
+            {% endif %}
+         {% endfor %}
+                          
+         {% if not product.owner.userpicture_set.all %}
+        
+            <img class='img-circle' src='{% static "img/img_user_none.png" %}' width="50em" height="50em"  />
+                
+         {% endif %}
+    </a>
+  </div><!--media-left-->
+
+  <div class="media-body">
+   <a style='font-size:1.25em;text-decoration:none;'href='/{{ request.user.university.id }}/home/profile/{{ product.owner.id }}/'><i>{{ product.owner.first_name }} {{ product.owner.last_name }}</i></a><br>
+   <div class='all-ratings'>
+<!--<i class="fa fa-star-half-o fa-2x" aria-hidden="true"></i>-->
+
+
+
+{% if rounded_num == 5 %}
+
+<span  class="rating">
+  <span id='5' class="star filled"></span>
+  <span id='4' class="star filled"></span>
+  <span id='3' class="star filled"></span>
+  <span id='2' class="star filled"></span>
+  <span id='1' class="star filled"></span>
+</span>
+{% endif %}
+
+{% if rounded_num == 4.5 %}
+
+<span  class="rating">
+  <span id='5' class="star half-filled"></span>
+  <span id='4' class="star filled"></span>
+  <span id='3' class="star filled"></span>
+  <span id='2' class="star filled"></span>
+  <span id='1' class="star filled"></span>
+</span>
+{% endif %}
+
+{% if rounded_num == 4 %}
+
+<span  class="rating">
+  <span id='5' class="star "></span>
+  <span id='4' class="star filled"></span>
+  <span id='3' class="star filled"></span>
+  <span id='2' class="star filled"></span>
+  <span id='1' class="star filled"></span>
+</span>
+{% endif %}
+
+{% if rounded_num == 3.5 %}
+
+<span  class="rating">
+  <span id='5' class="star"></span>
+  <span id='4' class="star half-filled"></span>
+  <span id='3' class="star filled"></span>
+  <span id='2' class="star filled"></span>
+  <span id='1' class="star filled"></span>
+</span>
+{% endif %}
+
+{% if rounded_num == 3 %}
+
+<span  class="rating">
+  <span id='5' class="star "></span>
+  <span id='4' class="star "></span>
+  <span id='3' class="star filled"></span>
+  <span id='2' class="star filled"></span>
+  <span id='1' class="star filled"></span>
+</span>
+{% endif %}
+
+{% if rounded_num == 2.5 %}
+
+<span  class="rating">
+  <span id='5' class="star "></span>
+  <span id='4' class="star "></span>
+  <span id='3' class="star half-filled"></span>
+  <span id='2' class="star filled"></span>
+  <span id='1' class="star filled"></span>
+</span>
+{% endif %}
+
+{% if rounded_num == 2 %}
+
+<span  class="rating">
+  <span id='5' class="star "></span>
+  <span id='4' class="star "></span>
+  <span id='3' class="star "></span>
+  <span id='2' class="star filled"></span>
+  <span id='1' class="star filled"></span>
+</span>
+{% endif %}
+
+{% if rounded_num == 1.5 %}
+
+<span  class="rating">
+  <span id='5' class="star "></span>
+  <span id='4' class="star "></span>
+  <span id='3' class="star "></span>
+  <span id='2' class="star half-filled"></span>
+  <span id='1' class="star filled"></span>
+</span>
+{% endif %}
+
+{% if rounded_num == 1 %}
+
+<span  class="rating">
+  <span id='5' class="star "></span>
+  <span id='4' class="star "></span>
+  <span id='3' class="star "></span>
+  <span id='2' class="star "></span>
+  <span id='1' class="star filled"></span>
+</span>
+{% endif %}
+
+{% if rounded_num == 0 %}
+<span  class="rating">
+  <span id='5' class="star"></span>
+  <span id='4' class="star"></span>
+  <span id='3' class="star"></span>
+  <span id='2' class="star"></span>
+  <span id='1' class="star"></span>
+</span>
+
+{% endif %}
+<!--<i class="fa fa-star fa-2x" aria-hidden="true"></i>-->
+
+</div><!--all-rating-->
+  </div><!--media-body-->
+
+  <div class="media-right">
+   <a href='/{{ request.user.university.id }}/home/messaging/thread/{{ product.owner.id }}/'><button class='btn btn-primary btn-lg'> Message </button></a>
+  </div><!--media-right-->
+</div><!--media-->
+	
+
+</div><!--end of well-->
+
+
+</div><!-- eond of product info-->
+
+
+
+</div><!-- end of row-->
+</div><!--all product-->
+
+<div id='edit-product'>
+  
+          <input form='edit_product'style='display:none;' type='file' name='image' id='edit-prod-image'>
+
+          <form style='padding:2em;'id='edit_product' method='POST' action='' name='example' enctype='multipart/form-data'> {% csrf_token %}
+
+            <div style='color:red' id='edit_product_error'>
+            <div id='product-success'></div>
+            </div>
+
+            
+              <div class='row'>
+                <div class='col-lg-4 col-md-4'>
+              {% if product.image %}
+              <a id='edit-prod-image-click'style='text-decoration:none;'href='#'>
+                  <div style='padding:.1em;border-radius:.75em;text-align:center;background-color:#F9F9F9'class='back-color'>
+                    <img style='padding:.5em;display:none;'class=' img-rounded' id='edit-test-img' src='' width="75%" height="75%" />
+                    <img id='current-image' style='padding:.5em;'class=' img-rounded' src='{{ product.image.url }}' width="140em" height="140em" />
+                    
+                    <p style='font-weight:bold;'>Change photo</p>
+                  </div>
+                
+                  <br><br>
+                  
+                  
+                 </a> 
+              {% endif %}
+              {% if not product.image %}
+               <a id='edit-prod-image-click'style='text-decoration:none;'href='#'>
+                  <div style='padding:.1em;border-radius:.75em;text-align:center;background-color:#F9F9F9'class='back-color'>
+                    <img style='padding:.5em;display:none;'class=' img-rounded' id='edit-test-img' src='' width="75%" height="75%" />
+                    <i id='edit-icon-img' style='font-size:9.5em;'class="fa fa-picture-o" aria-hidden="true"></i><br>
+                    
+                    <p style='font-weight:bold;'>Add photo</p>
+                  </div>
+                
+                  <br><br>
+                  
+                  
+                 </a> 
+              {% endif %}
+
+
+                </div>
+
+                <div class='col-lg-8 col-md-8'>
+
+                  <input style='border-radius:.75em;height:3em;background-color:#F9F9F9;'type='text' class='form-control' name='title' placeholder='*Title' id='title'><br>
+                  <div class="left-inner-addon">
+                      <span style='padding-top:.8em;color:#8C8C8C;'>$</span>
+                      <input style='border-radius:.75em;height:3em; background-color:#F9F9F9;' type="text" class="form-control" name='price' id='price' />
+                  </div><br>
+                <div class='row'>
+                  <div class='col-lg-6 col-md-6'>
+                      <select style='border-radius:.75em;height:3em; color:#8C8C8C; background-color:#F9F9F9;'name='category' class="form-control" id="category">
+                        <option value="" >*Category</option>
+                        <option {% if product.category == 'Textbooks' %}selected {% endif %}>Textbooks</option>
+                        <option {% if product.category == 'Apparel' %}selected {% endif %}>Apparel</option>
+                        <option {% if product.category == 'Electronics' %}selected {% endif %}>Electronics</option>
+                        <option {% if product.category == 'Furniture' %}selected {% endif %}>Furniture</option>
+                        <option {% if product.category == 'Sublet' %}selected {% endif %}>Sublet</option>
+                        <option {% if product.category == 'Tutors' %}selected {% endif %}>Tutors</option>
+                        <option {% if product.category == 'Other' %}selected {% endif %}>Other</option>
+                      </select>
+                    </div>
+                    
+                    <div class='col-lg-6 col-md-6'>
+                   
+                    <select style='border-radius:.75em;height:3em;color:#8C8C8C;background-color:#F9F9F9;' name='condition' class="form-control" id="condition">
+                          <option value="" >*Condition</option>
+                          <option {% if product.condition == 'New' %}selected {% endif %}>New</option>
+                          <option {% if product.category == 'Used' %}selected {% endif %}>Used</option>   
+                    </select>
+                  </div>
+                </div>
+
+                </div>
+
+                <div class='col-lg-12 col-md-12'>
+                 
+                  
+              <textarea placeholder='*Description'style='background-color:#F9F9F9;'class="form-control" rows="5" name='description' id="description"></textarea>
+<br>
+                </div>
+
+            </div><!--div class row-->
+
+            <div style='text-align:center;'>
+            <button  id='edit_button' class='btn btn-primary btn-lg' type='submit'>Update</button>
+          </div>
+          </form>
+</div>
+<script>
+
+
+ $('#edit-link').click(function(event){
+  event.preventDefault();
+    $('#edit-product').show();
+    $('#all-product').hide();
+  });
+
+ function editProductReadURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        
+        reader.onload = function (e) {
+            $('#edit-test-img').attr('src', e.target.result);
+        }
+        
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+    
+  $("#edit-prod-image").change(function(){
+    if (this.files[0].size >5000000){
+    $('#edit_product_error').html($("<div class='alert alert-danger'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Please</strong> make sure your image is less than 5MB</div>")).fadeIn(2000).fadeOut(3000);
+  
+  $('#edit-prod-image').val('');
+  $('#edit-test-img').hide();
+      $('#edit-icon-img').show();
+    }
+    else{
+      $('#edit-test-img').show();
+      $('#edit-icon-img').hide();
+      $('#current-image').hide();
+      editProductReadURL(this);
+    }
+  });
+
+  $('#edit-prod-image-click').on('click', function(e){
+        e.preventDefault();
+        $('#edit-prod-image')[0].click();
+    });
+
+  $('#price').val('{{ product.price }}');
+  $('#title').val('{{ product.title }}');
+  $('#description').val('{{ product.description }}');
+
+
+$('form').live('submit', function(event) {
+
+    event.preventDefault();
+    
+    var $form = $(this);
+    var id = $form.attr('id');
+    var formData = $form.serialize();
+
+
+
+    if ($form.attr("id") == "edit_product"){
+    var prod_id = {{ product.id }};
+    var formData = new FormData(this);
+    $.ajax({
+      type: "POST",
+      url:"/" + {{ request.user.university.id }} +"/home/edit_product/" + {{ product.id }} +"/",
+      data:formData,
+      cache:false,
+      contentType: false,
+      processData: false,
+
+      success: function(json){
+            var $response = json.response
+            if ($response){ 
+              $('#product-success').html($("<div class='alert alert-success'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>You have successfully updated item.</div>"))
+            }
+
+            else{
+              var obj = jQuery.parseJSON(json.errors);
+              $.each(obj, function(key,value) {
+              
+              $.each(value, function(k,v){
+                if (v.message){
+                  $("#product-success").html($("<div class='alert alert-danger'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>"+v.message+"</div>"));
+                    }
+                    
+                  });
+                });  
+             
+            
+              }
+
+          },
+      
+    });
+
+}
+  });
+
+
+
+
+
+
+
+
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+var csrftoken = getCookie('csrftoken');
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+
+}
+
+function sameOrigin(url) {
+    // test that a given url is a same-origin URL
+    // url could be relative or scheme relative or absolute
+    var host = document.location.host; // host + port
+    var protocol = document.location.protocol;
+    var sr_origin = '//' + host;
+    var origin = protocol + sr_origin;
+    // Allow absolute or scheme relative URLs to same origin
+    return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+        (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+        // or any other URL that isn't scheme relative or absolute i.e relative.
+        !(/^(\/\/|http:|https:).*/.test(url));
+}
+
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+            // Send the token to same-origin, relative URLs only.
+            // Send the token only if the method warrants CSRF protection
+            // Using the CSRFToken value acquired earlier
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+</script>

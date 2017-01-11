@@ -1,0 +1,612 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+<script>
+{% block jquery %}
+
+{% endblock %}
+</script>
+
+{% block content %}
+
+<style>
+
+.rating {
+    unicode-bidi:bidi-override;
+    direction:rtl;
+    font-size:1.25em;
+}
+.rating span.star {
+    font-family:FontAwesome;
+    font-weight:normal;
+    font-style:normal;
+    display:inline-block;
+}
+
+
+.rating span.star:before {
+    content:"\f006";
+    padding-right:5px;
+    color:#999999;
+}
+
+
+
+span.star.filled:before{ content:"\f005";color:#e3cf7a; }
+
+span.star.half-filled:before{ content:"\f089 ";color:#e3cf7a; }
+
+.prod-foot{
+  padding:20px;
+  background-color:#f7f7f7;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.image-wrapper-modal {
+    position: relative;
+    width: 100%;
+    height:25em;
+}
+.image-wrapper-modal p {
+    top: 0;
+    position: absolute;
+    left: 0;
+    
+    padding: 5%;
+
+    
+    font-size:2.5em;
+    width: auto;
+    height:auto;
+    color: #FFF;
+    margin: 0px;
+    background: rgb(56, 92, 125); /* Fallback for older browsers without RGBA-support */
+    background: rgba(56, 92, 125, 0.8);
+}
+
+.image-wrapper {
+    position: relative;
+    width: 100%;
+}
+.image-wrapper p {
+    bottom: 0;
+    position: absolute;
+    left: 0;
+    
+    padding: 5%;
+
+    
+    font-size:2em;
+    width: auto;
+    color: #FFF;
+    margin: 0px;
+    background: rgb(56, 92, 125); /* Fallback for older browsers without RGBA-support */
+    background: rgba(56, 92, 125, 0.7);
+}
+
+.prod img{
+        
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        
+        padding-bottom:0;
+        margin-bottom:0;
+    }
+
+.prod{
+
+        padding-left:0;
+        padding-right:0;
+        padding-top:0;
+        padding-bottom:0;
+        margin-bottom:0;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        
+        -webkit-background-size: 100% 100%;
+        -moz-background-size: 100% 100%;
+        -o-background-size: 100% 100%;
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        background-position: center center;
+    }
+
+
+.panel{
+  border-radius:5px;
+  margin-bottom:4px;
+  padding:0px;
+
+}
+
+
+
+.left-inner-addon {
+    position: relative;
+}
+.left-inner-addon input {
+    padding-left: 22px;    
+}
+.left-inner-addon span {
+    position: absolute;
+    padding: 7px 12px;
+    pointer-events: none;
+}
+
+.right-inner-addon {
+    position: relative;
+}
+.right-inner-addon input {
+    padding-right: 30px;    
+}
+.right-inner-addon span {
+    position: absolute;
+    right: 0px;
+    padding: 7px 12px;
+    pointer-events: none;
+}
+
+.header-bottom{
+  background: url('{% static "img/banner.png" %}') no-repeat center center ;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    
+    height:150px;
+}
+
+#topSearch{
+   background-color:rgba(255,255,255,0.5);
+   
+   height: 50px;
+   border:1px solid white;
+
+
+}
+#topSearch::-webkit-input-placeholder
+{
+      color: rgba(255,255,255,1.0);
+      
+}
+
+#topSearch::-moz-placeholder
+{
+      color: rgba(255,255,255,1.0);  
+}
+
+#topSearch::-ms-input-placeholder
+{
+      color: rgba(255,255,255,1.0);  
+}
+
+</style>
+
+
+
+<div class='header-bottom'>
+<div class='container'>
+<div class="row">
+  
+    <div style='padding:50px;'class="col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2">
+      <form id='topSearchForm' action='/{{ school.id }}/home/search/'method='GET' enctype='multipart/form-data'> 
+        <label for="topSearch" class="sr-only">Top Search</label>
+        <input type="text"  id="topSearch" name="q" class="form-control" placeholder="What are you looking for?">
+        <input style='display:none;' type='submit'>
+      </form>
+      <div id='add_product_success'></div>
+    </div><!-- /.col-md-8 -->
+</div><!-- /.row -->
+</div>
+</div>
+
+<div id='main-title'style='margin-top:20px;'class='container-fluid'>
+<div class='container-fluid'>
+<div class="row">
+<span style='color:#385c7d;font-size:1.5em;'>Recently Added at: <span style='font-weight:bold;'>{{ request.user.university.name|upper }}</span></span>
+</div><!-- /.row -->
+<div class='row'>
+<div class='col-lg-7'>
+
+</div>
+
+<div class='col-lg-5'>
+
+<label style='padding-right:1em;font-weight:bold;'>Filter By: </label>
+
+
+<div style='padding-right:1em;display:inline;'class="dropdown">
+  <button style='border-radius:.75em;background-color:white;color:black;'class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">{{ slug }}
+  <span class="caret"></span></button>
+
+  <ul class="filter-drop dropdown-menu">
+    <li><a href='/{{ school.id }}/home/category/Newest/' class='category' id='Newest'>Newest</a></li>
+    <li><a style='font-size:1em;text-decoration:none;'href='/{{ school.id }}/home/category/Textbooks/' class='category' id='Textbooks'>Textbooks</a></li>
+    <li><a style='font-size:1em;text-decoration:none;' href='/{{ school.id }}/home/category/Electronics/' class='category' id='Electronics'>Electronics</a></li>
+    <li><a style='font-size:1em;text-decoration:none;' href='/{{ school.id }}/home/category/Furniture/' class='category' id='Furniture'>Furniture</a></li>
+    <li><a style='font-size:1em;text-decoration:none;'href='/{{ school.id }}/home/category/Apparel/' class='category' id='Apparel'>Apparel</a></li>
+    <li><a style='font-size:1em;text-decoration:none;' href='/{{ school.id }}/home/category/Tutors/' class='category' id='Tutors'>Tutors</a></li>
+    <li><a href='/{{ school.id }}/home/category/Sublet/' class='category' id='Sublet'>Sublet</a></li>
+    <li><a href='/{{ school.id }}/home/category/Other/' class='category' id='Other'>Other</a></li>
+
+  </ul>
+
+</div><!--dropdown-->
+
+<label style='padding-right:1em;font-weight:bold;'>Sort By: </label>
+
+
+<div style='display:inline;'class="dropdown">
+  <button style='border-radius:.75em;background-color:white;color:black;'class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Price
+  <span class="caret"></span></button>
+
+  <ul class="filter-drop dropdown-menu">
+    <li><a href='/{{ school.id }}/home/category/{% if slug == 'Newest' %}Newest{% endif %}{{ category }}/sort/High/' class='category' id='Newest'>High to Low</a></li>
+    <li><a href='/{{ school.id }}/home/category/{% if slug == 'Newest' %}Newest{% endif %}{{ category }}/sort/Low/' class='category' id='Newest'>Low to High</a></li>
+    
+
+  </ul>
+
+</div><!--dropdown-->
+
+</div><!--col-lg-7-->
+</div><!--row-->
+</div><!--container-fluid-->
+</div><!--main-title-->
+
+
+
+<div class="container-fluid" id="main">
+
+  <div class="row">
+
+    <div class="col-md-2 col-sm-8">
+
+    
+      <div class="panel panel-default">
+          <div style='color:white;background-color:#385c7d;text-align:center;'class="panel-heading"><h4>Browse by Category</h4></div>
+
+
+        <div class="panel-body">
+          
+
+         <a href='/{{ school.id }}/home/category/Newest/' class='category' id='Newest'>Newest</a><br>
+          <i style='color:#D1D1D1;blue;padding-right:1em;'class="fa fa-book" aria-hidden="true"></i><a style='font-size:1em;text-decoration:none;'href='/{{ school.id }}/home/category/Textbooks/' class='category' id='Textbooks'>Textbooks</a><br>
+          <i style='color:#D1D1D1;blue;padding-right:1em;'class="fa fa-laptop" aria-hidden="true"></i><a style='font-size:1em;text-decoration:none;' href='/{{ school.id }}/home/category/Electronics/' class='category' id='Electronics'>Electronics</a><br>
+          <i style='color:#D1D1D1;blue;padding-right:1em;'class="fa fa-bed" aria-hidden="true"></i><a style='font-size:1em;text-decoration:none;' href='/{{ school.id }}/home/category/Furniture/' class='category' id='Furniture'>Furniture</a><br>
+          <i style='color:#D1D1D1;blue;padding-right:1em;'class="fa fa-tag" aria-hidden="true"></i> <a style='font-size:1em;text-decoration:none;'href='/{{ school.id }}/home/category/Apparel/' class='category' id='Apparel'>Apparel</a><br>
+          <i style='color:#D1D1D1;blue;padding-right:.75em;' class="fa fa-graduation-cap" aria-hidden="true"></i><a style='font-size:1em;text-decoration:none;' href='/{{ school.id }}/home/category/Tutors/' class='category' id='Tutors'>Tutors</a><br>
+          <i style='color:#D1D1D1;blue;padding-right:1em;'class="fa fa-home" aria-hidden="true"></i> <a href='/{{ school.id }}/home/category/Sublet/' class='category' id='Sublet'>Sublet</a><br>
+          <i style='color:#D1D1D1;blue;padding-right:1em;' class="fa fa-ellipsis-h" aria-hidden="true"></i> <a href='/{{ school.id }}/home/category/Other/' class='category' id='Other'>Other</a><br> 
+         
+            </div>
+        </div>
+
+
+     </div>
+
+
+
+            
+<div class="col-md-10 col-sm-11">
+
+<div id='search-results'></div>
+                                                                                                                                                                                                   
+<div id='wall'>
+
+{% for item in products %}
+      <div  class="item col-lg-3 col-md-3 col-sm-4 col-xs-6">
+     
+        <div style='padding-top:10px;'class='newest' id='textbook_{{ item.id }}'>
+              
+          <div class="panel panel-default">
+          
+            <div style='text-align:center;' class="prod panel-body ">
+              <div class="image-wrapper">
+              {% if item.image %}
+
+              <img class='img-responsive' src='{{ item.image.url }}' width='100%'>
+
+              {% endif %}
+
+              {% if not item.image %}
+
+              <div style='text-align:center;background-color:#D2D2D2;height:15em;'>
+                <span style='padding-top:.5em;font-size:5em;'class="fa-stack fa-lg"><i style='color:#B7B7B7;'class="fa fa-camera fa-stack-1x"></i><i style='opacity:.7;color:#D9D9D9;'class="fa fa-ban fa-stack-2x text-danger"></i>
+                </span>
+              </div>
+
+              {% endif %}
+             
+             <p>${{ item.price|truncatechars:22 }}</p>
+
+           </div><!--image-wrapper-->
+            </div><!--image panel-body-->
+            
+            <div class='panel-body'>
+
+              <a style='color:#666666;text-decoration:none;' data-toggle="modal" data-target="#myModalProductInfo" class='product_info' id='{{ item.id }}' href='#'><h4>{{ item.title|truncatechars:22|upper }}</h4></a>
+              <div style='color:#999999'>
+              <b >Condition:</b> <i>{{ item.condition }}</i> <br>
+              <b>Posted:</b> <i>{{ item.timestamp|timesince }} ago</i>
+              </div>
+            </div>
+
+            <div style='text-align:left;'class='prod-foot panel-footer'>
+ 
+              <div class="media">
+                <div class="media-left">
+                 <a style='text-decoration:none;'href='#'>
+                  {% for pic in item.owner.userpicture_set.all %}          
+                          {% if pic.image %}    
+                            <img class='img-circle'src='{{ pic.image.url }}' width="35em" height="35em" />   
+                          {% endif %}
+                       {% endfor %}
+                                        
+                   {% if not item.owner.userpicture_set.all %}
+                  
+                      <img class='img-circle' src='{% static "img/img_user_none.png" %}' width="35em" height="35em"  />
+                          
+                   {% endif %}
+                  </a>
+                </div><!--media-left-->
+
+                <div class="media-body">
+                 <a style='font-size:1.25em;text-decoration:none;'href='/{{ school.id }}/home/profile/{{ item.owner.id }}/'><i>{{ item.owner.first_name }} {{ item.owner.last_name }}</i></a><br>
+
+                 <div class='all-ratings'>
+              <!--<i class="fa fa-star-half-o fa-2x" aria-hidden="true"></i>-->
+
+
+
+              {% if rounded_num == 5 %}
+
+              <span  class="rating">
+                <span id='5' class="star filled"></span>
+                <span id='4' class="star filled"></span>
+                <span id='3' class="star filled"></span>
+                <span id='2' class="star filled"></span>
+                <span id='1' class="star filled"></span>
+              </span>
+              {% endif %}
+
+              {% if rounded_num == 4.5 %}
+
+              <span  class="rating">
+                <span id='5' class="star half-filled"></span>
+                <span id='4' class="star filled"></span>
+                <span id='3' class="star filled"></span>
+                <span id='2' class="star filled"></span>
+                <span id='1' class="star filled"></span>
+              </span>
+              {% endif %}
+
+              {% if rounded_num == 4 %}
+
+              <span  class="rating">
+                <span id='5' class="star "></span>
+                <span id='4' class="star filled"></span>
+                <span id='3' class="star filled"></span>
+                <span id='2' class="star filled"></span>
+                <span id='1' class="star filled"></span>
+              </span>
+              {% endif %}
+
+              {% if rounded_num == 3.5 %}
+
+              <span  class="rating">
+                <span id='5' class="star"></span>
+                <span id='4' class="star half-filled"></span>
+                <span id='3' class="star filled"></span>
+                <span id='2' class="star filled"></span>
+                <span id='1' class="star filled"></span>
+              </span>
+              {% endif %}
+
+              {% if rounded_num == 3 %}
+
+              <span  class="rating">
+                <span id='5' class="star "></span>
+                <span id='4' class="star "></span>
+                <span id='3' class="star filled"></span>
+                <span id='2' class="star filled"></span>
+                <span id='1' class="star filled"></span>
+              </span>
+              {% endif %}
+
+              {% if rounded_num == 2.5 %}
+
+              <span  class="rating">
+                <span id='5' class="star "></span>
+                <span id='4' class="star "></span>
+                <span id='3' class="star half-filled"></span>
+                <span id='2' class="star filled"></span>
+                <span id='1' class="star filled"></span>
+              </span>
+              {% endif %}
+
+              {% if rounded_num == 2 %}
+
+              <span  class="rating">
+                <span id='5' class="star "></span>
+                <span id='4' class="star "></span>
+                <span id='3' class="star "></span>
+                <span id='2' class="star filled"></span>
+                <span id='1' class="star filled"></span>
+              </span>
+              {% endif %}
+
+              {% if rounded_num == 1.5 %}
+
+              <span  class="rating">
+                <span id='5' class="star "></span>
+                <span id='4' class="star "></span>
+                <span id='3' class="star "></span>
+                <span id='2' class="star half-filled"></span>
+                <span id='1' class="star filled"></span>
+              </span>
+              {% endif %}
+
+              {% if rounded_num == 1 %}
+
+              <span  class="rating">
+                <span id='5' class="star "></span>
+                <span id='4' class="star "></span>
+                <span id='3' class="star "></span>
+                <span id='2' class="star "></span>
+                <span id='1' class="star filled"></span>
+              </span>
+              {% endif %}
+
+              {% if rounded_num == 0 %}
+              <span  class="rating">
+                <span id='5' class="star"></span>
+                <span id='4' class="star"></span>
+                <span id='3' class="star"></span>
+                <span id='2' class="star"></span>
+                <span id='1' class="star"></span>
+              </span>
+
+              {% endif %}
+              <!--<i class="fa fa-star fa-2x" aria-hidden="true"></i>-->
+
+              </div><!--all-rating-->
+                </div><!--media-body-->
+
+  
+              </div><!--media-->
+             
+
+            </div><!--footer-->   
+
+          </div><!--panel-default-->
+        </div><!--textbook id-->
+      </div><!--col-lg-3-->
+        
+{% endfor %}
+
+</div>  
+     
+</div> <!--end of product categories col-10-->
+
+
+</div><!--div row-->
+<br>
+<br>
+</div><!--main-->
+
+<!--javascript-->
+
+<script>
+
+$(window).load(function(){
+    $('#wall').masonry({
+      itemSelector : '.item',
+    });
+  });
+
+
+$(function(){
+  $('.product_info').click(function(){
+    var prod_id = $(this).attr('id');
+    $.ajax({
+      type: "GET",
+      url:"/product_info_ajax/",
+      data: {
+        'prod_info_id' : prod_id,
+        
+
+      },
+      success: infoSuccess,
+      dataType: 'html'
+    });
+  });
+});
+
+function infoSuccess(data, textStatus, jqXHR)
+{
+  $('#results').html(data);
+  
+  $('#results').show();
+
+}
+
+$('form').live('submit', function(event) {
+
+    event.preventDefault();
+    
+    var $form = $(this);
+    var id = $form.attr('id');
+    var formData = $form.serialize();
+
+if ($form.attr("id") == "navSearchForm"){
+  
+  this.submit();
+        
+
+}
+
+if ($form.attr("id") == "topSearchForm"){
+  
+  this.submit();
+        
+
+}
+
+
+});
+
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+var csrftoken = getCookie('csrftoken');
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+
+}
+
+function sameOrigin(url) {
+    // test that a given url is a same-origin URL
+    // url could be relative or scheme relative or absolute
+    var host = document.location.host; // host + port
+    var protocol = document.location.protocol;
+    var sr_origin = '//' + host;
+    var origin = protocol + sr_origin;
+    // Allow absolute or scheme relative URLs to same origin
+    return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+        (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+        // or any other URL that isn't scheme relative or absolute i.e relative.
+        !(/^(\/\/|http:|https:).*/.test(url));
+}
+
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+            // Send the token to same-origin, relative URLs only.
+            // Send the token only if the method warrants CSRF protection
+            // Using the CSRFToken value acquired earlier
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+
+</script>
+
+{% endblock %}

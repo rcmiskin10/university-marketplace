@@ -1,0 +1,162 @@
+{% extends "reg_base.html" %}
+{% load i18n %}
+
+{% load staticfiles %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block content_title %}<h1>{{ title }}</h1>{% endblock %}
+
+{% block content %}
+<style>
+          .col-lg-4{
+        padding-top:10em;
+        opacity:0.80;
+    }
+
+
+
+    .navbar{
+  background:transparent;
+  border-bottom:none;
+  color:white;
+  } 
+
+
+</style>
+<div style='text-align:center;' class='col-lg-4 col-lg-offset-4'>
+<div class='panel panel-default'>
+<div class='panel-body'>
+<div style='text-align:center;'>
+<h4 style='color:black;'>{% trans "Your account has been activate. You may go ahead and log in now." %}</h4>
+
+
+<div id='login_error_message'></div>
+<form id='login' class="form-signin" method="POST" action="/auth_login/">{% csrf_token %}
+        <h3 style='color:black; text-align:center;' class="form-signin-heading">Please sign in</h3>
+        <label for="inputEmail" class="sr-only">Email address</label>
+        <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Email address" required autofocus><br>
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
+        <div class="checkbox">
+          <label style='color:black;'>
+            <input type="checkbox" value="remember-me"> Remember me
+          </label>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+
+</div>
+</div><!--panel-body-->
+</div><!--panel-default-->
+</div><!--col-lg-4-->
+<script>
+
+
+
+$('form').live('submit', function(event) {
+
+    event.preventDefault();
+    
+    var $form = $(this);
+    var id = $form.attr('id');
+    var formData = $form.serialize();
+
+if ($form.attr("id") == "login"){
+    
+    
+    $.ajax({
+        type:'POST',
+        url: "/auth_login/",
+        dataType: "json",
+        data:formData,
+        
+        
+        
+        success: function (json) {
+          var $success = json.success
+          
+          if ($success == 'True'){
+            document.location.href = json.url;
+          }
+          if ($success == 'False'){ 
+          
+                $("#login_error_message").html($("<div class='alert alert-danger' role='alert'>Please try again!</div>"));
+                $('#login')[0].reset();
+              }
+              
+            
+           
+                
+                
+             
+          
+            
+            
+           
+           
+
+        },
+        error: function(data) {
+          $(".syl-error").html("All fields are required. Make sure your date is actually a DATE!").fadeIn(2000).fadeOut(6000);
+            
+        }
+    });
+    }
+
+
+
+ 
+
+
+});
+
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+var csrftoken = getCookie('csrftoken');
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+
+}
+
+function sameOrigin(url) {
+    // test that a given url is a same-origin URL
+    // url could be relative or scheme relative or absolute
+    var host = document.location.host; // host + port
+    var protocol = document.location.protocol;
+    var sr_origin = '//' + host;
+    var origin = protocol + sr_origin;
+    // Allow absolute or scheme relative URLs to same origin
+    return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+        (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+        // or any other URL that isn't scheme relative or absolute i.e relative.
+        !(/^(\/\/|http:|https:).*/.test(url));
+}
+
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+            // Send the token to same-origin, relative URLs only.
+            // Send the token only if the method warrants CSRF protection
+            // Using the CSRFToken value acquired earlier
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+</script>
+{% endblock %}
+

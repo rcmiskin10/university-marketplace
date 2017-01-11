@@ -1,0 +1,782 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+<script>
+{% block jquery %}
+
+{% endblock %}
+</script>
+{% block content %}
+
+<style>
+/* Extra Small */
+@media(max-width:767px){
+  #prof-img{
+    width:50%;
+    height:50%;
+  }
+}
+
+/* Small */
+@media(min-width:768px) and (max-width:991px){
+  #prof-img{
+    width:25%;
+    height:25%;
+  }
+
+}
+/* Medium */
+@media(min-width:992px) and (max-width:1199px){
+  #prof-img{
+    width:100%;
+    height:100%;
+  }
+}
+
+{% if rated == 1 or request.user == user %}
+.rating {
+  pointer-events: none;
+   cursor: default;
+   unicode-bidi:bidi-override;
+    direction:rtl;
+    font-size:30px;
+}
+{% endif %}
+{% if rated == 0 %}
+.rating span.star:hover {
+    cursor:pointer;
+}
+
+.rating span.star:hover:before, .rating span.star:hover~span.star:before {
+    content:"\f005";
+    color:#e3cf7a;
+}
+
+{% endif %}
+
+.rating {
+    unicode-bidi:bidi-override;
+    direction:rtl;
+    font-size:1.25em;
+}
+.rating span.star {
+    font-family:FontAwesome;
+    font-weight:normal;
+    font-style:normal;
+    display:inline-block;
+}
+
+
+.rating span.star:before {
+    content:"\f006";
+    padding-right:5px;
+    color:#999999;
+}
+
+
+
+span.star.filled:before{ content:"\f005";color:#e3cf7a; }
+
+span.star.half-filled:before{ content:"\f089 ";color:#e3cf7a; }
+
+.prod-foot{
+  padding:20px;
+  background-color:#f7f7f7;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+
+
+.image-wrapper p#sold {
+    bottom: 0;
+    position: absolute;
+    left: 0;
+    
+    padding: 5%;
+
+    
+    font-size:2em;
+    width: auto;
+    color: #FFF;
+    margin: 0px;
+    background: rgb(71, 179, 117); /* Fallback for older browsers without RGBA-support */
+    background: rgba(71, 179, 117, 0.7);
+}
+.image-wrapper-modal {
+    position: relative;
+    width: 100%;
+    height:25em;
+}
+.image-wrapper-modal p {
+    top: 0;
+    position: absolute;
+    left: 0;
+    
+    padding: 5%;
+
+    
+    font-size:2.5em;
+    width: auto;
+    height:auto;
+    color: #FFF;
+    margin: 0px;
+    background: rgb(56, 92, 125); /* Fallback for older browsers without RGBA-support */
+    background: rgba(56, 92, 125, 0.8);
+}
+
+.image-wrapper {
+    position: relative;
+    width: 100%;
+}
+.image-wrapper p  {
+    bottom: 0;
+    position: absolute;
+    left: 0;
+    
+    padding: 5%;
+
+    
+    font-size:2em;
+    width: auto;
+    color: #FFF;
+    margin: 0px;
+    background: rgb(56, 92, 125); /* Fallback for older browsers without RGBA-support */
+    background: rgba(56, 92, 125, 0.7);
+}
+
+.image-wrapper p#sold {
+    bottom: 0;
+    position: absolute;
+    left: 0;
+    
+    padding: 5%;
+
+    
+    font-size:2em;
+    width: auto;
+    color: #FFF;
+    margin: 0px;
+    background: rgb(71, 179, 117); /* Fallback for older browsers without RGBA-support */
+    background: rgba(71, 179, 117, 0.7);
+}
+.prod img{
+        
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        
+        padding-bottom:0;
+        margin-bottom:0;
+    }
+
+.prod{
+
+        padding-left:0;
+        padding-right:0;
+        padding-top:0;
+        padding-bottom:0;
+        margin-bottom:0;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        
+        -webkit-background-size: 100% 100%;
+        -moz-background-size: 100% 100%;
+        -o-background-size: 100% 100%;
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        background-position: center center;
+    }
+
+
+.panel{
+  border-radius:5px;
+  margin-bottom:4px;
+  padding:0px;
+
+}
+
+
+
+.left-inner-addon {
+    position: relative;
+}
+.left-inner-addon input {
+    padding-left: 22px;    
+}
+.left-inner-addon span {
+    position: absolute;
+    padding: 7px 12px;
+    pointer-events: none;
+}
+
+.right-inner-addon {
+    position: relative;
+}
+.right-inner-addon input {
+    padding-right: 30px;    
+}
+.right-inner-addon span {
+    position: absolute;
+    right: 0px;
+    padding: 7px 12px;
+    pointer-events: none;
+}
+
+#main{
+  padding-top:40px;
+}
+
+
+.navbar{
+  display:none;
+}
+
+.header-bottom{
+  background: url('{% static "img/banner.png" %}') no-repeat center center ;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    
+    height:150px;
+}
+
+#topSearch{
+   background-color:rgba(255,255,255,0.5);
+   
+   height: 50px;
+   border:1px solid white;
+
+
+}
+#topSearch::-webkit-input-placeholder
+{
+      color: rgba(255,255,255,1.0);
+      
+}
+
+#topSearch::-moz-placeholder
+{
+      color: rgba(255,255,255,1.0);  
+}
+
+#topSearch::-ms-input-placeholder
+{
+      color: rgba(255,255,255,1.0);  
+}
+
+</style>
+
+
+
+<div class='header-bottom'>
+<div class='container'>
+<div class="row">
+  
+    <div style='padding:50px;'class="col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2">
+      <form id='topSearchForm' action='/{{ school.id }}/home/search/'method='GET' enctype='multipart/form-data'> 
+        <label for="topSearch" class="sr-only">Top Search</label>
+        <input type="text"  id="topSearch" name="q" class="form-control" placeholder="What are you looking for?">
+        <input style='display:none;' type='submit'>
+      </form>
+      <div id='add_product_success'></div>
+    </div><!-- /.col-md-8 -->
+</div><!-- /.row -->
+</div>
+</div>
+<div id='main-title'></div>
+<br><br>
+
+<div class="container-fluid" id="main">
+
+  <div class="row" >
+
+    <div class="col-md-2 col-sm-12 col-xs-12 ">
+
+    
+      <div class="panel panel-default">
+          
+
+
+        <div style='text-align:center;'class="panel-body">
+          
+          
+          
+          {% for pic in user.userpicture_set.all %}          
+              {% if pic.image %}    
+                <img id='prof-img' class='img-circle'src='{{ pic.image.url }}' width="100%" height="100%" />   
+              {% endif %}
+          {% endfor %}
+                                        
+          {% if not user.userpicture_set.all %}
+        
+            <img id='prof-img' class='img-circle' src='{% static "img/img_user_none-2.png" %}' width="100%" height="100%"  />
+                
+          {% endif %}
+        
+    <br><br>
+
+    <p style='font-size:1.25em;color:#385c7d;' >{{ user.first_name }} {{ user.last_name }}</p>
+    <div class='thanks'></div>
+
+    <div class='all-ratings'>
+<!--<i class="fa fa-star-half-o fa-2x" aria-hidden="true"></i>-->
+
+
+
+{% if rounded_num == 5 %}
+
+<span  class="rating">
+  <i style='font-size:.75em;color:grey;'>(0.5)</i>
+  <span id='5' class="star filled"></span>
+  <span id='4' class="star filled"></span>
+  <span id='3' class="star filled"></span>
+  <span id='2' class="star filled"></span>
+  <span id='1' class="star filled"></span>
+ 
+</span>
+{% endif %}
+
+{% if rounded_num == 4.5 %}
+
+<span  class="rating">
+  <i style='font-size:.75em;color:grey;'>(5.4)</i>
+  <span id='5' class="star half-filled"></span>
+  <span id='4' class="star filled"></span>
+  <span id='3' class="star filled"></span>
+  <span id='2' class="star filled"></span>
+  <span id='1' class="star filled"></span>
+  
+</span>
+{% endif %}
+
+{% if rounded_num == 4 %}
+
+<span  class="rating">
+  <i style='font-size:.75em;color:grey;'>(0.4)</i>
+  <span id='5' class="star "></span>
+  <span id='4' class="star filled"></span>
+  <span id='3' class="star filled"></span>
+  <span id='2' class="star filled"></span>
+  <span id='1' class="star filled"></span>
+  
+</span>
+{% endif %}
+
+{% if rounded_num == 3.5 %}
+
+<span  class="rating">
+  <i style='font-size:.75em;color:grey;'>(5.3)</i>
+  <span id='5' class="star"></span>
+  <span id='4' class="star half-filled"></span>
+  <span id='3' class="star filled"></span>
+  <span id='2' class="star filled"></span>
+  <span id='1' class="star filled"></span>
+  
+</span>
+{% endif %}
+
+{% if rounded_num == 3 %}
+
+<span  class="rating">
+  <i style='font-size:.75em;color:grey;'>(0.3)</i>
+  <span id='5' class="star "></span>
+  <span id='4' class="star "></span>
+  <span id='3' class="star filled"></span>
+  <span id='2' class="star filled"></span>
+  <span id='1' class="star filled"></span>
+  
+</span>
+{% endif %}
+
+{% if rounded_num == 2.5 %}
+
+<span  class="rating">
+  <i style='font-size:.75em;color:grey;'>(5.2)</i>
+  <span id='5' class="star "></span>
+  <span id='4' class="star "></span>
+  <span id='3' class="star half-filled"></span>
+  <span id='2' class="star filled"></span>
+  <span id='1' class="star filled"></span>
+
+</span>
+{% endif %}
+
+{% if rounded_num == 2 %}
+
+<span  class="rating">
+  <i style='font-size:.75em;color:grey;'>(0.2)</i>
+  <span id='5' class="star "></span>
+  <span id='4' class="star "></span>
+  <span id='3' class="star "></span>
+  <span id='2' class="star filled"></span>
+  <span id='1' class="star filled"></span>
+
+</span>
+{% endif %}
+
+{% if rounded_num == 1.5 %}
+
+<span  class="rating">
+  <i style='font-size:.75em;color:grey;'>(5.1)</i>
+  <span id='5' class="star "></span>
+  <span id='4' class="star "></span>
+  <span id='3' class="star "></span>
+  <span id='2' class="star half-filled"></span>
+  <span id='1' class="star filled"></span>
+
+</span>
+{% endif %}
+
+{% if rounded_num == 1 %}
+
+<span  class="rating">
+  <i style='font-size:.75em;color:grey;'>(0.1)</i>
+  <span id='5' class="star "></span>
+  <span id='4' class="star "></span>
+  <span id='3' class="star "></span>
+  <span id='2' class="star "></span>
+  <span id='1' class="star filled"></span>
+
+</span>
+{% endif %}
+
+{% if rounded_num == 0 %}
+<span  class="rating">
+  <i style='font-size:.75em;color:grey;'>(0.0)</i>
+  <span id='5' class="star"></span>
+  <span id='4' class="star"></span>
+  <span id='3' class="star"></span>
+  <span id='2' class="star"></span>
+  <span id='1' class="star"></span>
+
+</span>
+
+{% endif %}
+<!--<i class="fa fa-star fa-2x" aria-hidden="true"></i>-->
+
+</div><!--all-rating-->
+<br>
+
+<a href='/{{ request.user.university.id }}/home/messaging/thread/{{ user.id }}/'><button class='btn btn-primary btn-lg'> Message </button></a>
+        </div>   
+            
+        </div>
+
+
+     </div>
+
+
+
+            
+<div class="col-md-10 col-sm-12 col-xs-12">
+
+<div id='search-results'></div>
+                                                                                                                                                                                                   
+<div id='wall'>
+
+{% for item in all_products %}
+      <div  class="item col-lg-3 col-md-3 col-sm-4 col-xs-6">
+     
+        <div style='padding-top:10px;'class='newest' id='textbook_{{ item.id }}'>
+              
+          <div class="panel panel-default">
+          
+            <div style='text-align:center;' class="prod panel-body ">
+              <div class="image-wrapper">
+              {% if item.image %}
+
+              <img class='img-responsive' src='{{ item.image.url }}' width='100%'>
+
+              {% endif %}
+
+              {% if not item.image %}
+
+              <div style='text-align:center;background-color:#D2D2D2;height:15em;'>
+                <span style='padding-top:.5em;font-size:5em;'class="fa-stack fa-lg"><i style='color:#B7B7B7;'class="fa fa-camera fa-stack-1x"></i><i style='opacity:.7;color:#D9D9D9;'class="fa fa-ban fa-stack-2x text-danger"></i>
+                </span>
+              </div>
+
+              {% endif %}
+             
+             {% if item.sold == False %}<p>${{ item.price|truncatechars:22 }}</p>{% endif %}
+             {% if item.sold == True %}<p id='sold'>SOLD</p>{% endif %}
+
+           </div><!--image-wrapper-->
+            </div><!--image panel-body-->
+            
+            <div class='panel-body'>
+
+              <a style='color:#666666;text-decoration:none;' data-toggle="modal" data-target="#myModalProductInfo" class='product_info' id='{{ item.id }}' href='#'><h4>{{ item.title|truncatechars:22|upper }}</h4></a>
+              <div style='color:#999999'>
+              <b >Condition:</b> <i>{{ item.condition }}</i> <br>
+              <b>Posted:</b> <i>{{ item.timestamp|timesince }} ago</i>
+              </div>
+            </div>
+
+           
+
+          </div><!--panel-default-->
+        </div><!--textbook id-->
+      </div><!--col-lg-3-->
+        
+{% endfor %}
+
+</div>  
+             
+             
+
+  
+
+
+      
+          
+</div> <!--end of product categories col-10-->
+
+
+</div><!--div row-->
+<br>
+<br>
+</div><!--main-->
+
+
+
+<!--javascript-->
+
+<script>
+
+$('.star').click(function () {
+    var id = $(this).attr('id');
+    $.ajax({
+      type: "POST",
+      url:"/rating_ajax/",
+      data: {
+        'rating_number' : id,
+        'user' : '{{ user }}',
+        'request_user': '{{ request.user }}'
+
+      },
+      success: ratingSuccess,
+      dataType: 'html'
+    });
+});
+
+function ratingSuccess(data, textStatus, jqXHR)
+  {
+
+    $('.all-ratings').hide();
+    $('.thanks').html("<h4>Thanks for rating!</h4>");
+
+  }
+
+
+  $(window).load(function(){
+    $('#wall').masonry({
+      itemSelector : '.item',
+    });
+  });
+  
+
+$(function(){
+  $('.product_info').click(function(){
+    var prod_id = $(this).attr('id');
+    $.ajax({
+      type: "GET",
+      url:"/product_info_ajax/",
+      data: {
+        'prod_info_id' : prod_id,
+        
+
+      },
+      success: infoSuccess,
+      dataType: 'html'
+    });
+  });
+});
+
+function infoSuccess(data, textStatus, jqXHR)
+{
+  $('#results').html(data);
+  
+  $('#results').show();
+  
+
+
+}
+
+$(function(){
+  $('#nav-search-bar').on('keydown', function(e) {
+    if (e.which == 13) {
+    $.ajax({
+      type: "POST",
+      url:"/home/"+{{ school.id }}+"/u-marketplace/search/",
+      data: {
+        'search_text' : $('#nav-search-bar').val(),
+        
+
+      },
+      success: navBarSearchSuccess,
+      dataType: 'html'
+    });
+  }
+  });
+});
+
+function navBarSearchSuccess(data, textStatus, jqXHR)
+{
+  $('#search-results').html(data);
+  $('#textbook').hide();
+  $('#room').hide();
+  $('#electronic').hide();
+  $('#housing').hide();
+  $('#other').hide();
+  $('#tutor').hide();
+  $('#newest').hide();
+  $('#matches').hide();
+  $("#apparel").hide();
+  $('#search-results').show();
+  $("#nav-search-bar").val("");
+}
+
+$('form').live('submit', function(event) {
+
+    event.preventDefault();
+    
+    var $form = $(this);
+    var id = $form.attr('id');
+    var formData = $form.serialize();
+
+if ($form.attr("id") == "navSearchForm"){
+  
+  this.submit();
+        
+
+}
+
+if ($form.attr("id") == "topSearchForm"){
+  
+  this.submit();
+        
+
+}
+
+if ($form.attr("id") == "edit-image"){
+
+    
+    var formData = new FormData(this);
+    $.ajax({
+        type:'POST',
+        url: "/edit_prof_pic/",
+        data:formData,
+        cache:false,
+        contentType: false,
+        processData: false,
+        
+        success: function (json) {
+          var $response = json.response
+          if ($response){  
+         
+            
+          document.location.reload();
+                
+          }
+
+          else{
+            $("#img-error").html($("<div class='alert alert-danger' role='alert'>Please try again!</div></p>")).fadeIn(2000).fadeOut(6000);
+                $('#edit-profile')[0].reset();
+          }
+             
+
+        },
+        error: function(data) {
+            
+        }
+    });
+    }
+    
+    if ($form.attr("id") == "sold"){
+    
+    $.ajax({
+        type: "POST",
+        url: "/sold/",
+        dataType: "json",
+        data: formData,
+        
+        
+        success: function (json) {
+          
+            console.log(json.id)
+            $('#textbook_'+ json.id).hide();
+            $('#housing_'+ json.id).hide();
+            $('#electronic_'+ json.id).hide();
+            $('#room_'+ json.id).hide();
+            $('#other_'+ json.id).hide();
+            $('#tutor_'+ json.id).hide();
+
+
+            
+        },
+        error: function(data) {
+          $(".syl-error").html("All fields are required. Make sure your date is actually a DATE!").fadeIn(2000).fadeOut(6000);
+            
+        }
+    });
+    }
+
+
+});
+
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+var csrftoken = getCookie('csrftoken');
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+
+}
+
+function sameOrigin(url) {
+    // test that a given url is a same-origin URL
+    // url could be relative or scheme relative or absolute
+    var host = document.location.host; // host + port
+    var protocol = document.location.protocol;
+    var sr_origin = '//' + host;
+    var origin = protocol + sr_origin;
+    // Allow absolute or scheme relative URLs to same origin
+    return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+        (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+        // or any other URL that isn't scheme relative or absolute i.e relative.
+        !(/^(\/\/|http:|https:).*/.test(url));
+}
+
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+            // Send the token to same-origin, relative URLs only.
+            // Send the token only if the method warrants CSRF protection
+            // Using the CSRFToken value acquired earlier
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+
+</script>
+
+
+{% endblock %}

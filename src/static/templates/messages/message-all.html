@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+<script>
+{% block jquery %}
+
+
+{% endblock %}
+</script>
+{% block content %}
+
+<style>
+
+.panel{
+  border-radius:5px;
+  margin-bottom:4px;
+  padding:0px;
+
+}
+
+#main{
+  padding-top:40px;
+}
+
+</style>
+
+<div id='main-title' style='padding-top:4em;'class="container" id="unread">
+
+  <div class="row">
+    <div class='col-lg-1'></div>
+
+    <div class='col-lg-3'>
+
+      <i style='color:#385c7d;font-size:1.5em;'>Unread Messages: 0</i>
+    </div>
+  </div>
+</div>
+
+<div id='add_product_success'></div>
+
+<div class="container" id="main">
+
+  <div class="row">
+
+  <div class='col-lg-1'></div>
+ 
+  
+  <div class='col-lg-3'>
+    <div class="panel panel-default">
+  <div style='background-color:#f9f7f8;padding-top:1em;' class="panel-heading"><h3>No Messages</h3></div>
+  <div style='height:270px;border-radius-bottom: 10px;padding:10px;'class="panel-body">
+    
+  </div>
+</div>
+  </div>
+
+
+    <div class='col-lg-6'>
+    <div class="panel panel-default">
+  
+  <div id='convo' style='overflow:auto;height:300px;' class="panel-body">
+    
+    <div id='ajax-message'></div>
+  </div>
+
+<div class="panel-body">
+  <br>
+
+
+
+</div><!--panel-body-->
+
+
+</div>
+  </div>
+
+  <div class='col-lg-1'></div>
+
+  
+
+
+</div><!--div row-->
+<br>
+<br>
+</div><!--main-->
+
+
+<script>
+
+
+</script>
+
+{% endblock %}

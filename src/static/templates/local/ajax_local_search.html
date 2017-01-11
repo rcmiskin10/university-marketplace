@@ -1,0 +1,119 @@
+{% load staticfiles %}
+<div class="modal fade" id="myModalLocalInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Place Info</h4>
+                  </div>
+                  <div class="modal-body">
+
+                     <div id='local_results'>
+
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+
+
+{% for item in category_places %}
+		<div class="media">
+            <div class="media-left">
+            {% if item.image %}
+            <img src='{{ item.image.url }}' width="50" height="50" /><br>
+            {% endif %}
+            {% if not item.image %}
+            <img src='{% static "img/default-group.png" %}' width="100" height="100" /><br>
+            {% endif %}
+        </div>
+      <div class="media-body">
+      <a data-toggle="modal" data-target="#myModalLocalInfo" class='local_info' id='{{ item.id }}' href='#'>{{ item.name }}</a><br>
+      <small>{{ item.address }}</small><br>
+
+      
+      
+      {{ item.hours }}<br>
+      
+      
+      {% if item.delivery %}
+      Delivery: Yes!
+      {% endif %}
+      <br>
+      <a target="_blank" href='{{ item.website }}'>Website</a><br>
+        {% if item.menu %}<a target="_blank" href='{{ item.menu }}'>Menu</a><br>{% endif %}
+      
+      </div>
+      
+    </div>
+      <hr>
+
+{% endfor %}
+
+{% for place in places %}
+{% if not place in category_places %}
+  <div class="media">
+        <div class="media-left">
+        {% if place.image %}
+        <img src='{{ place.image.url }}' width="50" height="50" /><br>
+        {% endif %}
+        {% if not place.image %}
+        <img src='{% static "img/default-group.png" %}' width="100" height="100" /><br>
+        {% endif %}
+    </div>
+  <div class="media-body">
+  <a data-toggle="modal" data-target="#myModalLocalInfo" class='local_info' id='{{ place.id }}' href='#'>{{ place.name }}</a><br>
+  <small>{{ place.address }}</small><br>
+
+  
+  
+  {{ place.hours }}<br>
+  
+  
+  {% if place.delivery %}
+  Delivery: Yes!
+  {% endif %}
+  <br>
+  <a target="_blank" href='{{ place.website }}'>Website</a><br>
+    {% if place.menu %}<a target="_blank" href='{{ place.menu }}'>Menu</a><br>{% endif %}
+  
+  </div>
+  
+</div>
+  <hr>
+{% endif %}
+{% endfor %}
+
+<script>
+
+$(function(){
+  $('.local_info').click(function(){
+    var local_id = $(this).attr('id');
+
+    $.ajax({
+      type: "GET",
+      url:"/local_info_ajax/",
+      data: {
+        'local_info_id' : local_id,
+        
+
+      },
+      success: localSuccess,
+      dataType: 'html'
+    });
+  });
+});
+
+function localSuccess(data, textStatus, jqXHR)
+{
+
+  $('#local_results').html(data);
+  
+  $('#local_results').show();
+  
+
+
+}
+
+</script>

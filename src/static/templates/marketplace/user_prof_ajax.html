@@ -1,0 +1,311 @@
+{% load staticfiles %}
+
+<style>
+#prod-list li{ display:none;
+}
+{% if rated == 1 or request.user == user %}
+.rating {
+	pointer-events: none;
+   cursor: default;
+   unicode-bidi:bidi-override;
+    direction:rtl;
+    font-size:30px;
+}
+{% endif %}
+
+.rating {
+    unicode-bidi:bidi-override;
+    direction:rtl;
+    font-size:30px;
+}
+.rating span.star {
+    font-family:FontAwesome;
+    font-weight:normal;
+    font-style:normal;
+    display:inline-block;
+}
+{% if rated == 0 %}
+.rating span.star:hover {
+    cursor:pointer;
+}
+
+.rating span.star:hover:before, .rating span.star:hover~span.star:before {
+    content:"\f005";
+    color:#e3cf7a;
+}
+
+{% endif %}
+
+.rating span.star:before {
+    content:"\f006";
+    padding-right:5px;
+    color:#999999;
+}
+
+
+
+span.star.filled:before{ content:"\f005";color:#e3cf7a; }
+
+span.star.half-filled:before{ content:"\f089 ";color:#e3cf7a; }
+
+</style>
+<div style='text-align:center;' id='top'>
+<h4>{{ user.first_name }} {{ user.last_name }} </h4>
+
+<div class='thanks'></div>
+
+
+<div class='all-ratings'>
+<!--<i class="fa fa-star-half-o fa-2x" aria-hidden="true"></i>-->
+
+{{ rounded_num }}
+
+{% if rounded_num == 5 %}
+
+<span  class="rating">
+	<span id='5' class="star filled"></span>
+	<span id='4' class="star filled"></span>
+	<span id='3' class="star filled"></span>
+	<span id='2' class="star filled"></span>
+	<span id='1' class="star filled"></span>
+</span>
+{% endif %}
+
+{% if rounded_num == 4.5 %}
+
+<span  class="rating">
+	<span id='5' class="star half-filled"></span>
+	<span id='4' class="star filled"></span>
+	<span id='3' class="star filled"></span>
+	<span id='2' class="star filled"></span>
+	<span id='1' class="star filled"></span>
+</span>
+{% endif %}
+
+{% if rounded_num == 4 %}
+
+<span  class="rating">
+	<span id='5' class="star "></span>
+	<span id='4' class="star filled"></span>
+	<span id='3' class="star filled"></span>
+	<span id='2' class="star filled"></span>
+	<span id='1' class="star filled"></span>
+</span>
+{% endif %}
+
+{% if rounded_num == 3.5 %}
+
+<span  class="rating">
+	<span id='5' class="star"></span>
+	<span id='4' class="star half-filled"></span>
+	<span id='3' class="star filled"></span>
+	<span id='2' class="star filled"></span>
+	<span id='1' class="star filled"></span>
+</span>
+{% endif %}
+
+{% if rounded_num == 3 %}
+
+<span  class="rating">
+	<span id='5' class="star "></span>
+	<span id='4' class="star "></span>
+	<span id='3' class="star filled"></span>
+	<span id='2' class="star filled"></span>
+	<span id='1' class="star filled"></span>
+</span>
+{% endif %}
+
+{% if rounded_num == 2.5 %}
+
+<span  class="rating">
+	<span id='5' class="star "></span>
+	<span id='4' class="star "></span>
+	<span id='3' class="star half-filled"></span>
+	<span id='2' class="star filled"></span>
+	<span id='1' class="star filled"></span>
+</span>
+{% endif %}
+
+{% if rounded_num == 2 %}
+
+<span  class="rating">
+	<span id='5' class="star "></span>
+	<span id='4' class="star "></span>
+	<span id='3' class="star "></span>
+	<span id='2' class="star filled"></span>
+	<span id='1' class="star filled"></span>
+</span>
+{% endif %}
+
+{% if rounded_num == 1.5 %}
+
+<span  class="rating">
+	<span id='5' class="star "></span>
+	<span id='4' class="star "></span>
+	<span id='3' class="star "></span>
+	<span id='2' class="star half-filled"></span>
+	<span id='1' class="star filled"></span>
+</span>
+{% endif %}
+
+{% if rounded_num == 1 %}
+
+<span  class="rating">
+	<span id='5' class="star "></span>
+	<span id='4' class="star "></span>
+	<span id='3' class="star "></span>
+	<span id='2' class="star "></span>
+	<span id='1' class="star filled"></span>
+</span>
+{% endif %}
+
+{% if rounded_num == 0 %}
+<span  class="rating">
+	<span id='5' class="star"></span>
+	<span id='4' class="star"></span>
+	<span id='3' class="star"></span>
+	<span id='2' class="star"></span>
+	<span id='1' class="star"></span>
+</span>
+
+{% endif %}
+<!--<i class="fa fa-star fa-2x" aria-hidden="true"></i>-->
+
+</div><!--all-rating-->
+
+
+</div>
+
+<div class='row'>
+<div style='text-align:center;'class='col-lg-6'>
+	<h4>Listed Items</h4>
+	<hr>
+	<ul style='padding-left:0;list-style: none;' id='prod-list'>
+	{% for item in products %}
+		<li>
+		<div style='text-align:center;'>
+              <h5>{{ item.title|truncatechars:22 }}</h5>
+                {% if item.image %}
+                            <img src='{{ item.image.url }}' width="100" height="100" /><br>
+                            {% endif %}
+                            {% if not item.image %}
+                            <img src='{% static "img/product.png" %}' width="100" height="100" />
+                            {% endif %}
+              </div>
+        </li>
+	{% endfor %}
+	</ul>
+	{% if products %}
+	<a href='#' id='prev-item'>Previous |</a>  <a href='#' id='next-item'>Next</a>  
+	{% endif %}
+</div>
+<div class='col-lg-6'>
+
+ {% for item in request.user.userpicture_set.all %}
+                    
+                    {% if item.image %}
+                        
+                            
+                            <img src='{{ item.image.url }}' width="200" height="200" />
+                       
+                        
+                    {% endif %}
+
+                
+            {% endfor %}
+            
+            {% if not request.user.userpicture_set.all %}
+            
+                    <img src='{% static "img/default-prof.png" %}' width="200" height="200" />
+                    
+            {% endif %}
+
+
+</div>
+
+
+</div>
+
+<script>
+
+$('.star').click(function () {
+    var id = $(this).attr('id');
+    $.ajax({
+      type: "POST",
+      url:"/rating_ajax/",
+      data: {
+        'rating_number' : id,
+        'user' : '{{ user }}',
+        'request_user': '{{ request.user }}'
+
+      },
+      success: ratingSuccess,
+      dataType: 'html'
+    });
+});
+
+function ratingSuccess(data, textStatus, jqXHR)
+{
+
+	$('.all-ratings').hide();
+	$('.thanks').html("<h4>Thanks for rating!</h4>");
+
+}
+
+$(document).ready(function () {
+    size_li = $("#prod-list li").size();
+    size = size_li - 1
+    x=0;
+
+    $('#prod-list li:eq('+x+')').show();
+$('#next-item').click(function () {
+        x= (x+1 <= size) ? x+1 : size;
+        
+        $('#prod-list li:eq('+x+')').show();
+        $('#prod-list li').not(':eq('+x+')').hide();
+        $('#prev-item').show();
+        if (x == size ){
+		$('#next-item').hide();
+		}
+	if (x < size ){
+	$('#next-item').show();
+	}
+	if (x > 0 ){
+	$('#prev-item').show();
+	}
+});
+
+
+$('#prev-item').click(function () {
+        x= (x-1 <= size) ? x-1 : size;
+        
+        $('#prod-list li:eq('+x+')').show();
+        $('#prod-list li').not(':eq('+x+')').hide();
+        if (x == 0 ){
+	$('#prev-item').hide();
+	}
+
+	if (x < size ){
+	$('#next-item').show();
+	}
+	if (x > 0 ){
+	$('#prev-item').show();
+	}
+
+});
+
+
+     if (x == 0 ){
+	$('#prev-item').hide();
+	}
+	if (x == size ){
+	$('#next-item').hide();
+	}
+	if (size_li == 0 ){
+	$('#next-item').hide();
+	}
+
+
+});
+
+</script>

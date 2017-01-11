@@ -1,0 +1,108 @@
+{% load staticfiles %}	
+
+<div id='wall'>
+
+{% for item in products %}
+      <div  class="item col-lg-3 col-md-3 col-sm-4 col-xs-6">
+     
+        <div style='padding-top:10px;'class='newest' id='textbook_{{ item.id }}'>
+              
+          <div class="panel panel-default">
+          
+            <div style='text-align:center;' class="prod panel-body ">
+              <div class="image-wrapper">
+              {% if item.image %}
+
+              <img class='img-responsive' src='{{ item.image.url }}' width='100%'>
+
+              {% endif %}
+
+              {% if not item.image %}
+
+              <img class='img-responsive' src='{% static "img/product.png" %}' width='100%'>
+
+              {% endif %}
+             
+             <p>${{ item.price|truncatechars:22 }}</p>
+
+           </div><!--image-wrapper-->
+            </div><!--image panel-body-->
+            
+            <div class='panel-body'>
+
+              <a style='color:black;text-decoration:none;' data-toggle="modal" data-target="#myModalProductInfo" class='product_info' id='{{ item.id }}' href='#'><h4>{{ item.title|truncatechars:22 }}</h4></a>
+
+              <b>Condition:</b> <i>{{ item.condition }}</i> <br>
+              <b>Posted:</b> <i>{{ item.timestamp|timesince }} ago</i>
+
+            </div>
+
+            <div style='text-align:center;'class='prod-foot panel-footer'>
+              
+
+             
+
+              
+
+              {% if not request.user == item.owner %}
+                <a data-toggle="modal" data-target="#myModalProfile" class='user_profile' id='{{ item.owner.id }}'href='#'>
+
+                  {% for pic in item.user.userpicture_set.all %}
+                    
+                    {% if pic.image %}
+                        
+                            
+                      <img class='img-circle'src='{{ pic.image.url }}' width="30" height="25" />
+                       
+                        
+                    {% endif %}
+
+                
+                  {% endfor %}
+                          
+                  {% if not item.user.userpicture_set.all %}
+                  
+                    <img class='img-circle' src='{% static "img/default-prof.png" %}' width="30" height="25" />
+                          
+                  {% endif %} 
+
+
+
+                  {{ item.owner.first_name|truncatechars:11 }} {{ item.owner.last_name|truncatechars:11 }}
+
+
+                </a>
+
+              {% endif %}
+
+              {% if request.user == item.owner %}
+                You're selling this item!
+              {% endif %}
+              <br><br>
+              {% if not request.user == item.owner %}
+                <form id='message_prod_{{ item.id }}' method='GET' action='' enctype='multipart/form-data'> {% csrf_token %}
+
+                  <button id='message_button'class="btn btn-primary" type="submit">Message</button>
+                  <input type='hidden' value='{{ item.owner.id }}' name='user_id'>
+
+                </form>
+              {% endif %}
+
+              {% if request.user == item.owner %}
+                <form id='sold' action='/sold/' method='POST'>{% csrf_token %}
+                  <input type='hidden' value='{{ item.id }}' name='product_id'>
+                  <button class="btn btn-success" type="submit">Mark as Sold</button>
+                </form>
+
+              {% endif %}
+
+
+            </div><!--footer-->   
+
+          </div><!--panel-default-->
+        </div><!--textbook id-->
+      </div><!--col-lg-3-->
+        
+{% endfor %}
+
+</div>  

@@ -1,0 +1,83 @@
+   
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+    <div style='margin-bottom:0px;'class='header-top'>
+  <div class='container-fluid'>
+<div  class='row'>
+
+<div id='left' style='text-align:left;' class='col-xs-3'>
+
+
+<div id='user-name' class="dropdown">
+  <a style='color:white;text-decoration:none;'href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+
+    <div class="media">
+                <div style='padding:.5em;' class="media-left">
+                 
+                  {% for pic in request.user.userpicture_set.all %}          
+                          {% if pic.image %}    
+                            <img class='img-circle'src='{{ pic.image.url }}' width="35em" height="35em" />   
+                          {% endif %}
+                       {% endfor %}
+                                        
+                   {% if not request.user.userpicture_set.all %}
+                  
+                      <img class='img-circle' src='{% static "img/img_user_none.png" %}' width="35em" height="35em"  />
+                          
+                   {% endif %}
+                  
+                </div><!--media-left-->
+
+                <div style='padding:.7em;' class="media-body">
+                <p id='u-name' style='font-size:1.25em;'>{{ request.user.first_name }} {{ request.user.last_name }} <span class="badge badge-notify" id='notifyCount'>0</span>  <span class="caret"></span></p>
+                
+                 <span style='display:none;' id='img-caret' class="caret"></span>
+                </div><!--media-body-->
+
+ 
+              </div><!--media-->
+
+           </a>
+  <ul class="nav-drop-down dropdown-menu" aria-labelledby="dropdownMenu1">
+    <li><a href="/{{ school.id }}/home/" data-prevent=""><i style='padding-right:1em;font-size:1.25em;color:grey;' class="fa fa-home" aria-hidden="true"></i><b>Home</b></a></li>
+    <li id='rating-list'></li> 
+    <li><a href='/{{ school.id }}/home/messaging/all/{{ request.user.id }}/'><i style='padding-right:.75em;font-size:1.25em;color:grey;'class="fa fa-comment" aria-hidden="true"></i><b>View Messages</b> <span class="badge badge-notify" id='notifyCount'>0</span></a></li>
+    
+    <li><a href="/{{ school.id }}/home/my-profile/{{ request.user.id }}/" data-prevent=""><i style='padding-right:1em;font-size:1.25em;color:grey;' class="fa fa-user" aria-hidden="true"></i><b>View My Profile</b></a></li>
+    <li><a href='/{{ school.id }}/home/matching-profile/{{ request.user.id }}/'><i style='padding-right:.9em;font-size:1.25em;color:grey;' class="fa fa-exchange" aria-hidden="true"></i><b>Services</b></a></li>       
+    <li><a style='display:none;' id='add-prod' href='#' data-toggle="modal" data-target="#myModalProduct"><i style='padding-right:.9em;font-size:1.25em;color:grey'class="fa fa-plus-circle" aria-hidden="true"></i>Add Product/Service</a></li>
+    <li><a href="/logout/" data-prevent=""><i style='padding-right:.9em;font-size:1.25em;color:grey;' class="fa fa-sign-out" aria-hidden="true"></i> <b>Logout</b></a></li>
+  </ul>
+</div><!--drowpdown-->
+
+
+
+</div>
+
+
+
+<div id='middle' style='text-align:center;'class='col-xs-6'>
+<a id='middle-logo'style='font-size:2.25em;color:white;text-decoration:none;'href="/{{ request.user.university.id }}/home/">STUDENT GROUNDS</a>
+<div style='padding:.5em;'>
+<form id='navSearchForm' action='/{{ school.id }}/home/search/'method='GET' enctype='multipart/form-data'>
+<label for="navSearch" class="sr-only">Top Search</label>
+        <input type="text"  id="navSearch" name="q" class="form-control" placeholder="What are you looking for?">
+        <input form='navSearchForm' style='display:none;' type='submit'>
+</form>
+      </div>
+</div>
+
+
+<div id='right'style='padding:.7em;text-align:right;'class='col-xs-3'>
+<a id='add' style='font-size:1.25em;color:white;text-decoration:none;'href='#' data-toggle="modal" data-target="#myModalProduct"><i style='color:#385c7d;'class="fa fa-plus-circle" aria-hidden="true"></i> Add Product/Service</a>
+
+        
+     
+
+</div>
+
+</div><!--row-->
+</div><!--container-->
+</div><!--header-->
+
+

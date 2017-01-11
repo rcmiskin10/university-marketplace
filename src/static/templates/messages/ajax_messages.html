@@ -1,0 +1,53 @@
+
+
+
+
+    <div class="panel panel-default">
+    <div id='convo'style='overflow:auto;height:400px;' class="panel-body">
+      
+      {% for item in message_convo %}
+      
+        {% if not item.3 == 'You' %}
+        
+        <li style="padding-right: 40%;list-style-type: none;" class='text-left '><div style="padding-right: 2px;" class='well'><small>{{ item.1 }}</small> - <small>{{ item.0|timesince }}</small></div></li> 
+       
+        {% else %}
+        
+        <li style="padding-left: 40%; list-style-type: none;" class='text-right '><div style="background-color:#909DD4;padding-left: 2px;"class='well'><small>{{ item.1 }}</small> - <small>{{ item.0|timesince }}</small></div></li> 
+      
+        {% endif %}
+      
+
+      
+       
+      {% endfor %}
+      
+      <div id='ajax-message'></div>
+  
+    </div><!--panel-body-->
+
+   
+      
+<div style='height:100px;' class="panel-body">
+	<br>
+
+<form id='user_compose_{{ user.id }}' method='POST' action='' name='example' enctype='multipart/form-data'> {% csrf_token %}
+
+<input type='hidden' value='{{ user.id }}' name='id'>
+	<div class='input-group'>
+ <div style='overflow: hidden; padding-left: .5em;'>
+	<textarea  class='form-control' name='body'style='resize: none;height:46px;' placeholder='Compose Message...' id='comment'></textarea>
+</div>
+	<span class='input-group-btn'><button style='text-align:center;' class='btn btn-primary btn-lg' type='submit'>Send</button></span></div>
+
+</form>
+
+
+            
+                
+              
+            
+
+    </div><!--panel-body-->
+  </div><!--panel default-->
+

@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+<script>
+{% block jquery %}
+
+{% endblock %}
+</script>
+{% block content %}
+
+<style>
+
+#main{
+  padding-top:40px;
+}
+
+</style>
+
+<div id='main-title' style='padding-top:4em;'class="container" id="unread">
+
+  <div class="row">
+    <div class='col-lg-1'></div>
+
+    <div class='col-lg-3'>
+
+      <i style='color:#385c7d;font-size:1.5em;'>Unread Messages: {{ count }}</i>
+    </div>
+  </div>
+</div>
+
+<div id='add_product_success'></div>
+<div class="container" id="main">
+
+  <div class="row">
+
+  <div class='col-lg-1'></div>
+ 
+  
+  <div class='col-lg-3'>
+    <div class="panel panel-default">
+  <div style='background-color:#f9f7f8;padding-top:1em;' class="panel-heading"><h4>All Messages</h4></div>
+  <div style='border-radius-bottom: 10px;padding:0px;'class="panel-body">
+    <!--if no sent or received messages -->
+    {% if not send_id_list %}
+       <div style='margin-bottom:0px;'class="list-group">
+          <a style='padding:1.25em;border-radius:0px;font-size:1.25em;'href="/{{ request.user.university.id }}/home/messaging/thread/{{ user.id }}/" id='{{ user.id }}' class="click-sender list-group-item active">
+            {{ user.first_name }} {{ user.last_name }} 
+          </a>
+          </div>
+      {% endif %}
+
+     <!-- if no messages between no users don't do anything above will handle that -->
+      {% if id_list %}
+       <!-- if user not in id list -->
+      {% if user.id not in id_list %}
+
+        <div style='margin-bottom:0px;'class="list-group">
+          <a style='padding:1.25em;border-radius:0px;font-size:1.25em;'href="/{{ request.user.university.id }}/home/messaging/thread/{{ user.id }}/" id='{{ user.id }}' class="click-sender list-group-item active">
+            {{ user.first_name }} {{ user.last_name }} 
+          </a>
+          </div>
+      {% endif %}
+      {% endif %}
+
+      {% for sender in send_id_list %}
+        
+      <!--current user page-->
+        {% if sender.1 == user.id %}
+        <div style='margin-bottom:0px;'class="list-group">
+          <a style='padding:1.25em;border-radius:0px;font-size:1.25em;'href="/{{ request.user.university.id }}/home/messaging/thread/{{ sender.1 }}/" id='{{ sender.1 }}' class="click-sender list-group-item active">
+            {{ sender.0 }} 
+          </a>
+          </div>
+        {% endif %} 
+        <!-- other messages -->
+
+        {% if sender.1 != user.id %}
+         <div style='margin-bottom:0px;' class="list-group">
+          <a style='padding:1.25em;border-radius:0px;font-size:1.25em;'href="/{{ request.user.university.id }}/home/messaging/thread/{{ sender.1 }}/" id='{{ sender.1 }}' class="click-sender list-group-item">
+            {{ sender.0 }}
+          </a>
+        </div>
+        {% endif %}
+
+      {% endfor %}
+  </div>
+</div>
+  </div>
+
+    <div class='col-lg-6'>
+    <div class="panel panel-default">
+  <div style='background-color:#f9f7f8;'class="panel-heading">
+    <div class="media">
+                <div class="media-left">
+                 <a style='text-decoration:none;'href='#'>
+                  {% for pic in user.userpicture_set.all %}          
+                          {% if pic.image %}    
+                            <img class='img-circle'src='{{ pic.image.url }}' width="45em" height="45em" />   
+                          {% endif %}
+                       {% endfor %}
+                                        
+                   {% if not user.userpicture_set.all %}
+                  
+                      <img class='img-circle' src='{% static "img/img_user_none.png" %}' width="45em" height="45em"  />
+                          
+                   {% endif %}
+                  </a>
+                </div><!--media-left-->
+
+                <div style='padding-top:.5em;'class="media-body">
+                 <a style='font-size:1.50em;text-decoration:none;'href='/{{ school.id }}/home/profile/{{ user.id }}/'>{{ user.first_name }} {{ user.last_name }}</a>
+
+                
+                </div><!--media-body-->
+
+                <div style='padding-top:1em;'class="media-right">
+
+                  
+                 <a class='delete-convo' id='{{ user.id }}'><i style='font-size:1.5em;'class="fa fa-trash-o" aria-hidden="true"></i></a>
+
+                </div><!--media-right-->
+
+  
+              </div><!--media-->
+  </div>
+  <div id='convo' style='overflow:auto;height:300px;' class="panel-body">
+    {% for item in message_convo %}
+      
+        {% if not item.3 == 'You' %}
+        
+        <li style="padding-right: 50%;list-style-type: none;" class='text-left '><div style="background-color:#f1f5f8;margin: 0px;padding: 1em;color:#727274;" class='well'>{{ item.1|linebreaks }}</div>
+          <small style='color:grey;'>{{ item.0 }}</small>
+        </li> 
+       <br>
+        {% else %}
+        
+        <li style="padding-left: 50%; list-style-type: none;" class='text-right '><div style="background-color:#c4daef;margin: 0px;padding: 1em;color:#727274;"class='well'>{{ item.1|linebreaks }} </div>
+        <small style='color:grey;'> {{ item.0 }}</small>
+      </li> 
+      <br>  
+        {% endif %}
+
+       
+    {% endfor %}
+    <div id='ajax-message'></div>
+  </div>
+
+<div class="panel-body">
+  <br>
+
+<form id='user_compose_{{ user.id }}' method='POST' action='' name='example' enctype='multipart/form-data'> {% csrf_token %}
+
+<input type='hidden' value='{{ user.id }}' name='id'>
+
+  <textarea class='form-control' name='body'style='background-color:#e9e9e9;border-radius:10px;resize: none;height:7em;' placeholder='Compose Message...' id='comment'></textarea>
+<input style='display:none;' type='submit'>
+</form>
+
+</div><!--panel-body-->
+
+
+</div>
+  </div>
+
+  <div class='col-lg-1'></div>
+
+</div><!--div row-->
+<br>
+<br>
+</div><!--main-->
+
+<script>
+
+
+
+
+</script>
+
+{% endblock %}

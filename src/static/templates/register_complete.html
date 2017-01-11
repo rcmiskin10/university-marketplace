@@ -1,0 +1,40 @@
+
+{% extends "reg_base.html" %}
+{% load i18n %}
+
+{% load staticfiles %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block content_title %}<h1>{{ title }}</h1>{% endblock %}
+
+{% block content %}
+<style>
+          .col-lg-4{
+        padding-top:10em;
+        opacity:0.80;
+    }
+
+
+
+    .navbar{
+  background:transparent;
+  border-bottom:none;
+  color:white;
+  } 
+
+
+</style>
+<div style='text-align:center;' class='col-lg-4 col-lg-offset-4'>
+<div class='panel panel-default'>
+<div class='panel-body'>
+<div style='text-align:center;'>
+<h4 style='color:black;'>{% trans "Congratulations! You have successfully registered. To activate your account please click the link in the email we've sent you to the email address provided." %}</h4>
+
+
+
+</div><!--panel-body-->
+</div><!--panel-default-->
+</div><!--col-lg-4-->
+
+{% endblock %}
+

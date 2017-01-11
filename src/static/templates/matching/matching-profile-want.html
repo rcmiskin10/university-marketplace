@@ -1,0 +1,1393 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+<script>
+{% block jquery %}
+
+
+
+{% endblock %}
+</script>
+
+{% block content %}
+
+<style>
+
+
+.panel-group{
+  margin:2px;
+}
+#main{
+	padding-top:75px;
+}
+.panel{
+  border-radius:5px;
+  margin-bottom:4px;
+  padding:0px;
+
+}
+
+
+.title-head{
+  text-align:center;
+  color:#385c7d;
+  font-size: 2.25em;
+  padding-top:2.5em;
+}
+.nav-tabs > li {
+    float:none;
+    display:inline-block;
+    *display:inline; /* ie7 fix */
+     zoom:1; /* hasLayout ie7 trigger */
+}
+
+.nav-tabs  {
+    text-align:center;
+}
+
+ul.nav.nav-tabs li a:hover{
+border-radius:0px;
+border:none;
+  background: rgb(206, 206, 206) transparent;
+/* nice browsers */
+background: rgba(206, 206, 206, 0.3);
+
+}
+ul.nav.nav-tabs li .select{
+  background: rgb(206, 206, 206) transparent;
+/* nice browsers */
+background: rgba(206, 206, 206, 0.3);
+border:none;
+border-radius:0px;
+text-decoration:none;
+
+}
+ul.nav.nav-tabs li a{
+text-decoration:none;
+
+}
+
+</style>
+
+
+
+<div class='container-fluid'>
+ <div id='add_product_success'></div>
+<div class='title-head'>
+
+MARKET MATCH 
+
+
+</div>
+
+
+<br>
+
+<ul style='border:none;'class="nav nav-tabs">
+  
+ <li ><a href="/{{ school.id }}/home/matching-profile/{{ request.user.id }}/">My Opportunities</a></li>
+  <li ><a class='select' href="/{{ school.id }}/home/matching-profile-want/{{ request.user.id }}/">Potential Providers</a></li>
+  
+</ul>
+
+
+</div>
+   		
+
+
+
+
+<div class='providers'>
+
+<div class='container'>
+<div class='row'>
+
+<div style='padding:3em;'class='col-lg-12 col-md-12 col-sm-12 col-xs-12'>
+
+
+<div style='padding:2em;padding-left:6em;'class='col-lg-6 col-md-6 col-sm-12 col-xs-12'>
+<i style='color:#385c7d;font-weight: normal;font-size:1.5em;'>What services people are providing?</i>
+<br><br>
+
+
+ <!-- athletic accordian--> 
+     {% if do_list_athletic %}
+      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-default">
+    <div style='background-color:#337ab7;'class="panel-heading" role="tab" id="headingOne">
+      <h4 class="panel-title">
+        <a class='collapsed'style='color:white;text-decoration:none;'role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+         	{% if do_list_athletic %}Athletic Trainer ({{ do_list_athletic|length }}){% endif %}
+        </a>
+      </h4>
+    </div>
+    <div id="collapseOne" style='background-color:#f4f4f4;border:none;'class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingOne">
+      <div class="panel-body">
+      	{% for item in do_list_athletic %}
+
+
+         <div class="media">
+  <div class="media-left">
+   <a style='text-decoration:none;'href='#'>
+    {% for pic in item.1.userpicture_set.all %}          
+            {% if pic.image %}    
+              <img class='img-circle'src='{{ pic.image.url }}' width="50" height="50" />   
+            {% endif %}
+         {% endfor %}
+                          
+         {% if not item.1.userpicture_set.all %}
+        
+            <img class='img-circle' src='{% static "img/img_user_none.png" %}' width="50em" height="50em"  />
+                
+         {% endif %}
+    </a>
+  </div><!--media-left-->
+
+  <div class="media-body">
+   <a style='color:#385c7d;font-size:1.25em;text-decoration:none;'href='/{{ school.id }}/home/profile/{{ item.1.id }}/'>{{ item.1.first_name }} {{ item.1.last_name }}</a><br><p style='font-size:1em;color:grey;'>Offering:<i> {{ item.0 }}</i></p>
+
+  </div><!--media-body-->
+
+  <div class="media-right">
+   <a href='/{{ request.user.university.id }}/home/messaging/thread/{{ item.1.id }}/'><button class='btn btn-primary btn-lg'> Message </button></a>
+  </div><!--media-right-->
+</div><!--media-->
+
+
+    <hr >
+     {% endfor %} 
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+    
+ <!--end of athletic-->
+
+ 
+  <!-- bartender accordian--> 
+     {% if do_list_bartender %}
+      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-default">
+    <div style='background-color:#337ab7;'class="panel-heading" role="tab" id="headingOne">
+      <h4 class="panel-title">
+        <a class='collapsed'style='color:white;text-decoration:none;'role="button" data-toggle="collapse" data-parent="#accordion-bartender" href="#collapseBartender" aria-expanded="true" aria-controls="collapseOne">
+         	{% if do_list_bartender %}Bartender ({{ do_list_bartender|length }}){% endif %}
+        </a>
+      </h4>
+    </div>
+    <div id="collapseBartender" style='background-color:#f4f4f4;border:none;'class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingOne">
+      <div class="panel-body">
+      	{% for item in do_list_bartender %}
+
+
+         <div class="media">
+  <div class="media-left">
+   <a style='text-decoration:none;'href='#'>
+    {% for pic in item.1.userpicture_set.all %}          
+            {% if pic.image %}    
+              <img class='img-circle'src='{{ pic.image.url }}' width="50" height="50" />   
+            {% endif %}
+         {% endfor %}
+                          
+         {% if not item.1.userpicture_set.all %}
+        
+            <img class='img-circle' src='{% static "img/img_user_none.png" %}' width="50em" height="50em"  />
+                
+         {% endif %}
+    </a>
+  </div><!--media-left-->
+
+  <div class="media-body">
+   <a style='color:#385c7d;font-size:1.25em;text-decoration:none;'href='/{{ school.id }}/home/profile/{{ item.1.id }}/'>{{ item.1.first_name }} {{ item.1.last_name }}</a><br><p style='font-size:1em;color:grey;'>Offering:<i> {{ item.0 }}</i></p>
+
+  </div><!--media-body-->
+
+  <div class="media-right">
+   <a href='/{{ request.user.university.id }}/home/messaging/thread/{{ item.1.id }}/'><button class='btn btn-primary btn-lg'> Message </button></a>
+  </div><!--media-right-->
+</div><!--media-->
+
+
+    <hr >
+     {% endfor %} 
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+    
+ <!--end of bartender-->
+
+  <!-- chef accordian--> 
+     {% if do_list_chef %}
+      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-default">
+    <div style='background-color:#337ab7;'class="panel-heading" role="tab" id="headingOne">
+      <h4 class="panel-title">
+        <a class='collapsed'style='color:white;text-decoration:none;'role="button" data-toggle="collapse" data-parent="#accordion-chef" href="#collapseChef" aria-expanded="true" aria-controls="collapseOne">
+          {% if do_list_chef %}Chef ({{ do_list_chef|length }}){% endif %}
+        </a>
+      </h4>
+    </div>
+    <div id="collapseChef" style='background-color:#f4f4f4;border:none;'class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingOne">
+      <div class="panel-body">
+        {% for item in do_list_chef %}
+
+
+         <div class="media">
+  <div class="media-left">
+   <a style='text-decoration:none;'href='#'>
+    {% for pic in item.1.userpicture_set.all %}          
+            {% if pic.image %}    
+              <img class='img-circle'src='{{ pic.image.url }}' width="50" height="50" />   
+            {% endif %}
+         {% endfor %}
+                          
+         {% if not item.1.userpicture_set.all %}
+        
+            <img class='img-circle' src='{% static "img/img_user_none.png" %}' width="50em" height="50em"  />
+                
+         {% endif %}
+    </a>
+  </div><!--media-left-->
+
+  <div class="media-body">
+   <a style='color:#385c7d;font-size:1.25em;text-decoration:none;'href='/{{ school.id }}/home/profile/{{ item.1.id }}/'>{{ item.1.first_name }} {{ item.1.last_name }}</a><br><p style='font-size:1em;color:grey;'>Offering:<i> {{ item.0 }}</i></p>
+
+  </div><!--media-body-->
+
+  <div class="media-right">
+   <a href='/{{ request.user.university.id }}/home/messaging/thread/{{ item.1.id }}/'><button class='btn btn-primary btn-lg'> Message </button></a>
+  </div><!--media-right-->
+</div><!--media-->
+
+
+    <hr >
+     {% endfor %} 
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+    
+ <!--end of chef-->
+
+<!-- driver accordian--> 
+     {% if do_list_driver %}
+      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-default">
+    <div style='background-color:#337ab7;'class="panel-heading" role="tab" id="headingOne">
+      <h4 class="panel-title">
+        <a class='collapsed'style='color:white;text-decoration:none;'role="button" data-toggle="collapse" data-parent="#accordion-driver" href="#collapseDriver" aria-expanded="true" aria-controls="collapseOne">
+          {% if do_list_driver %}Driver ({{ do_list_driver|length }}){% endif %}
+        </a>
+      </h4>
+    </div>
+    <div id="collapseDriver" style='background-color:#f4f4f4;border:none;'class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingOne">
+      <div class="panel-body">
+        {% for item in do_list_driver %}
+
+
+         <div class="media">
+  <div class="media-left">
+   <a style='text-decoration:none;'href='#'>
+    {% for pic in item.1.userpicture_set.all %}          
+            {% if pic.image %}    
+              <img class='img-circle'src='{{ pic.image.url }}' width="50" height="50" />   
+            {% endif %}
+         {% endfor %}
+                          
+         {% if not item.1.userpicture_set.all %}
+        
+            <img class='img-circle' src='{% static "img/img_user_none.png" %}' width="50em" height="50em"  />
+                
+         {% endif %}
+    </a>
+  </div><!--media-left-->
+
+  <div class="media-body">
+   <a style='color:#385c7d;font-size:1.25em;text-decoration:none;'href='/{{ school.id }}/home/profile/{{ item.1.id }}/'>{{ item.1.first_name }} {{ item.1.last_name }}</a><br><p style='font-size:1em;color:grey;'>Offering:<i> {{ item.0 }}</i></p>
+
+  </div><!--media-body-->
+
+  <div class="media-right">
+   <a href='/{{ request.user.university.id }}/home/messaging/thread/{{ item.1.id }}/'><button class='btn btn-primary btn-lg'> Message </button></a>
+  </div><!--media-right-->
+</div><!--media-->
+
+
+    <hr >
+     {% endfor %} 
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+    
+ <!--end of driver-->
+
+<!-- delivery driver accordian--> 
+     {% if do_list_delivery %}
+      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-default">
+    <div style='background-color:#337ab7;'class="panel-heading" role="tab" id="headingOne">
+      <h4 class="panel-title">
+        <a class='collapsed'style='color:white;text-decoration:none;'role="button" data-toggle="collapse" data-parent="#accordion-delivery" href="#collapseDelivery" aria-expanded="true" aria-controls="collapseOne">
+          {% if do_list_delivery %}Delivery Driver ({{ do_list_delivery|length }}){% endif %}
+        </a>
+      </h4>
+    </div>
+    <div id="collapseDelivery" style='background-color:#f4f4f4;border:none;'class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingOne">
+      <div class="panel-body">
+        {% for item in do_list_delivery %}
+
+
+         <div class="media">
+  <div class="media-left">
+   <a style='text-decoration:none;'href='#'>
+    {% for pic in item.1.userpicture_set.all %}          
+            {% if pic.image %}    
+              <img class='img-circle'src='{{ pic.image.url }}' width="50" height="50" />   
+            {% endif %}
+         {% endfor %}
+                          
+         {% if not item.1.userpicture_set.all %}
+        
+            <img class='img-circle' src='{% static "img/img_user_none.png" %}' width="50em" height="50em"  />
+                
+         {% endif %}
+    </a>
+  </div><!--media-left-->
+
+  <div class="media-body">
+   <a style='color:#385c7d;font-size:1.25em;text-decoration:none;'href='/{{ school.id }}/home/profile/{{ item.1.id }}/'>{{ item.1.first_name }} {{ item.1.last_name }}</a><br><p style='font-size:1em;color:grey;'>Offering:<i> {{ item.0 }}</i></p>
+
+  </div><!--media-body-->
+
+  <div class="media-right">
+   <a href='/{{ request.user.university.id }}/home/messaging/thread/{{ item.1.id }}/'><button class='btn btn-primary btn-lg'> Message </button></a>
+  </div><!--media-right-->
+</div><!--media-->
+
+
+    <hr >
+     {% endfor %} 
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+    
+ <!--end of delivery driver-->
+
+<!-- cleaning accordian--> 
+     {% if do_list_cleaning %}
+      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-default">
+    <div style='background-color:#337ab7;'class="panel-heading" role="tab" id="headingOne">
+      <h4 class="panel-title">
+        <a class='collapsed'style='color:white;text-decoration:none;'role="button" data-toggle="collapse" data-parent="#accordion-cleaning" href="#collapseCleaning" aria-expanded="true" aria-controls="collapseOne">
+          {% if do_list_cleaning %}Cleaning ({{ do_list_cleaning|length }}){% endif %}
+        </a>
+      </h4>
+    </div>
+    <div id="collapseCleaning" style='background-color:#f4f4f4;border:none;'class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingOne">
+      <div class="panel-body">
+        {% for item in do_list_cleaning %}
+
+
+         <div class="media">
+  <div class="media-left">
+   <a style='text-decoration:none;'href='#'>
+    {% for pic in item.1.userpicture_set.all %}          
+            {% if pic.image %}    
+              <img class='img-circle'src='{{ pic.image.url }}' width="50" height="50" />   
+            {% endif %}
+         {% endfor %}
+                          
+         {% if not item.1.userpicture_set.all %}
+        
+            <img class='img-circle' src='{% static "img/img_user_none.png" %}' width="50em" height="50em"  />
+                
+         {% endif %}
+    </a>
+  </div><!--media-left-->
+
+  <div class="media-body">
+   <a style='color:#385c7d;font-size:1.25em;text-decoration:none;'href='/{{ school.id }}/home/profile/{{ item.1.id }}/'>{{ item.1.first_name }} {{ item.1.last_name }}</a><br><p style='font-size:1em;color:grey;'>Offering:<i> {{ item.0 }}</i></p>
+
+  </div><!--media-body-->
+
+  <div class="media-right">
+   <a href='/{{ request.user.university.id }}/home/messaging/thread/{{ item.1.id }}/'><button class='btn btn-primary btn-lg'> Message </button></a>
+  </div><!--media-right-->
+</div><!--media-->
+
+
+    <hr >
+     {% endfor %} 
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+    
+ <!--end of cleaning-->
+
+ <!-- laundry accordian--> 
+     {% if do_list_laundry %}
+      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-default">
+    <div style='background-color:#337ab7;'class="panel-heading" role="tab" id="headingOne">
+      <h4 class="panel-title">
+        <a class='collapsed'style='color:white;text-decoration:none;'role="button" data-toggle="collapse" data-parent="#accordion-laundry" href="#collapseLaundry" aria-expanded="true" aria-controls="collapseOne">
+          {% if do_list_laundry %}Laundry ({{ do_list_laundry|length }}){% endif %}
+        </a>
+      </h4>
+    </div>
+    <div id="collapseLaundry" style='background-color:#f4f4f4;border:none;'class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingOne">
+      <div class="panel-body">
+        {% for item in do_list_laundry %}
+
+
+         <div class="media">
+  <div class="media-left">
+   <a style='text-decoration:none;'href='#'>
+    {% for pic in item.1.userpicture_set.all %}          
+            {% if pic.image %}    
+              <img class='img-circle'src='{{ pic.image.url }}' width="50" height="50" />   
+            {% endif %}
+         {% endfor %}
+                          
+         {% if not item.1.userpicture_set.all %}
+        
+            <img class='img-circle' src='{% static "img/img_user_none.png" %}' width="50em" height="50em"  />
+                
+         {% endif %}
+    </a>
+  </div><!--media-left-->
+
+  <div class="media-body">
+   <a style='color:#385c7d;font-size:1.25em;text-decoration:none;'href='/{{ school.id }}/home/profile/{{ item.1.id }}/'>{{ item.1.first_name }} {{ item.1.last_name }}</a><br><p style='font-size:1em;color:grey;'>Offering:<i> {{ item.0 }}</i></p>
+
+  </div><!--media-body-->
+
+  <div class="media-right">
+   <a href='/{{ request.user.university.id }}/home/messaging/thread/{{ item.1.id }}/'><button class='btn btn-primary btn-lg'> Message </button></a>
+  </div><!--media-right-->
+</div><!--media-->
+
+
+    <hr >
+     {% endfor %} 
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+    
+ <!--end of laundry-->
+
+  <!-- interior designer accordian--> 
+     {% if do_list_designer %}
+      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-default">
+    <div style='background-color:#337ab7;'class="panel-heading" role="tab" id="headingOne">
+      <h4 class="panel-title">
+        <a class='collapsed'style='color:white;text-decoration:none;'role="button" data-toggle="collapse" data-parent="#accordion-designer" href="#collapseDesigner" aria-expanded="true" aria-controls="collapseOne">
+          {% if do_list_designer %}Interior Designer ({{ do_list_designer|length }}){% endif %}
+        </a>
+      </h4>
+    </div>
+    <div id="collapseDesigner" style='background-color:#f4f4f4;border:none;'class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingOne">
+      <div class="panel-body">
+        {% for item in do_list_designer %}
+
+
+         <div class="media">
+  <div class="media-left">
+   <a style='text-decoration:none;'href='#'>
+    {% for pic in item.1.userpicture_set.all %}          
+            {% if pic.image %}    
+              <img class='img-circle'src='{{ pic.image.url }}' width="50" height="50" />   
+            {% endif %}
+         {% endfor %}
+                          
+         {% if not item.1.userpicture_set.all %}
+        
+            <img class='img-circle' src='{% static "img/img_user_none.png" %}' width="50em" height="50em"  />
+                
+         {% endif %}
+    </a>
+  </div><!--media-left-->
+
+  <div class="media-body">
+   <a style='color:#385c7d;font-size:1.25em;text-decoration:none;'href='/{{ school.id }}/home/profile/{{ item.1.id }}/'>{{ item.1.first_name }} {{ item.1.last_name }}</a><br><p style='font-size:1em;color:grey;'>Offering:<i> {{ item.0 }}</i></p>
+
+  </div><!--media-body-->
+
+  <div class="media-right">
+   <a href='/{{ request.user.university.id }}/home/messaging/thread/{{ item.1.id }}/'><button class='btn btn-primary btn-lg'> Message </button></a>
+  </div><!--media-right-->
+</div><!--media-->
+
+
+    <hr >
+     {% endfor %} 
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+    
+ <!--end of designer-->
+
+   <!-- moving accordian--> 
+     {% if do_list_moving %}
+      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-default">
+    <div style='background-color:#337ab7;'class="panel-heading" role="tab" id="headingOne">
+      <h4 class="panel-title">
+        <a class='collapsed'style='color:white;text-decoration:none;'role="button" data-toggle="collapse" data-parent="#accordion-moving" href="#collapseMoving" aria-expanded="true" aria-controls="collapseOne">
+          {% if do_list_moving %}Moving ({{ do_list_moving|length }}){% endif %}
+        </a>
+      </h4>
+    </div>
+    <div id="collapseMoving" style='background-color:#f4f4f4;border:none;'class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingOne">
+      <div class="panel-body">
+        {% for item in do_list_moving %}
+
+
+         <div class="media">
+  <div class="media-left">
+   <a style='text-decoration:none;'href='#'>
+    {% for pic in item.1.userpicture_set.all %}          
+            {% if pic.image %}    
+              <img class='img-circle'src='{{ pic.image.url }}' width="50" height="50" />   
+            {% endif %}
+         {% endfor %}
+                          
+         {% if not item.1.userpicture_set.all %}
+        
+            <img class='img-circle' src='{% static "img/img_user_none.png" %}' width="50em" height="50em"  />
+                
+         {% endif %}
+    </a>
+  </div><!--media-left-->
+
+  <div class="media-body">
+   <a style='color:#385c7d;font-size:1.25em;text-decoration:none;'href='/{{ school.id }}/home/profile/{{ item.1.id }}/'>{{ item.1.first_name }} {{ item.1.last_name }}</a><br><p style='font-size:1em;color:grey;'>Offering:<i> {{ item.0 }}</i></p>
+
+  </div><!--media-body-->
+
+  <div class="media-right">
+   <a href='/{{ request.user.university.id }}/home/messaging/thread/{{ item.1.id }}/'><button class='btn btn-primary btn-lg'> Message </button></a>
+  </div><!--media-right-->
+</div><!--media-->
+
+
+    <hr >
+     {% endfor %} 
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+    
+ <!--end of moving-->
+
+
+   <!-- musician accordian--> 
+     {% if do_list_musician %}
+      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-default">
+    <div style='background-color:#337ab7;'class="panel-heading" role="tab" id="headingOne">
+      <h4 class="panel-title">
+        <a class='collapsed'style='color:white;text-decoration:none;'role="button" data-toggle="collapse" data-parent="#accordion-musician" href="#collapseMusician" aria-expanded="true" aria-controls="collapseOne">
+          {% if do_list_musician %}Musician ({{ do_list_musician|length }}){% endif %}
+        </a>
+      </h4>
+    </div>
+    <div id="collapseMusician" style='background-color:#f4f4f4;border:none;'class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingOne">
+      <div class="panel-body">
+        {% for item in do_list_musician %}
+
+
+         <div class="media">
+  <div class="media-left">
+   <a style='text-decoration:none;'href='#'>
+    {% for pic in item.1.userpicture_set.all %}          
+            {% if pic.image %}    
+              <img class='img-circle'src='{{ pic.image.url }}' width="50" height="50" />   
+            {% endif %}
+         {% endfor %}
+                          
+         {% if not item.1.userpicture_set.all %}
+        
+            <img class='img-circle' src='{% static "img/img_user_none.png" %}' width="50em" height="50em"  />
+                
+         {% endif %}
+    </a>
+  </div><!--media-left-->
+
+  <div class="media-body">
+   <a style='color:#385c7d;font-size:1.25em;text-decoration:none;'href='/{{ school.id }}/home/profile/{{ item.1.id }}/'>{{ item.1.first_name }} {{ item.1.last_name }}</a><br><p style='font-size:1em;color:grey;'>Offering:<i> {{ item.0 }}</i></p>
+
+  </div><!--media-body-->
+
+  <div class="media-right">
+   <a href='/{{ request.user.university.id }}/home/messaging/thread/{{ item.1.id }}/'><button class='btn btn-primary btn-lg'> Message </button></a>
+  </div><!--media-right-->
+</div><!--media-->
+
+
+    <hr >
+     {% endfor %} 
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+    
+ <!--end of musician-->
+
+   <!-- dj accordian--> 
+     {% if do_list_dj %}
+      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-default">
+    <div style='background-color:#337ab7;'class="panel-heading" role="tab" id="headingOne">
+      <h4 class="panel-title">
+        <a class='collapsed'style='color:white;text-decoration:none;'role="button" data-toggle="collapse" data-parent="#accordion-dj" href="#collapseDJ" aria-expanded="true" aria-controls="collapseOne">
+          {% if do_list_dj %}D.J. ({{ do_list_dj|length }}){% endif %}
+        </a>
+      </h4>
+    </div>
+    <div id="collapseDJ" style='background-color:#f4f4f4;border:none;'class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingOne">
+      <div class="panel-body">
+        {% for item in do_list_dj %}
+
+
+         <div class="media">
+  <div class="media-left">
+   <a style='text-decoration:none;'href='#'>
+    {% for pic in item.1.userpicture_set.all %}          
+            {% if pic.image %}    
+              <img class='img-circle'src='{{ pic.image.url }}' width="50" height="50" />   
+            {% endif %}
+         {% endfor %}
+                          
+         {% if not item.1.userpicture_set.all %}
+        
+            <img class='img-circle' src='{% static "img/img_user_none.png" %}' width="50em" height="50em"  />
+                
+         {% endif %}
+    </a>
+  </div><!--media-left-->
+
+  <div class="media-body">
+   <a style='color:#385c7d;font-size:1.25em;text-decoration:none;'href='/{{ school.id }}/home/profile/{{ item.1.id }}/'>{{ item.1.first_name }} {{ item.1.last_name }}</a><br><p style='font-size:1em;color:grey;'>Offering:<i> {{ item.0 }}</i></p>
+
+  </div><!--media-body-->
+
+  <div class="media-right">
+   <a href='/{{ request.user.university.id }}/home/messaging/thread/{{ item.1.id }}/'><button class='btn btn-primary btn-lg'> Message </button></a>
+  </div><!--media-right-->
+</div><!--media-->
+
+
+    <hr >
+     {% endfor %} 
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+    
+ <!--end of dj-->
+
+    <!-- comedian accordian--> 
+     {% if do_list_comedian %}
+      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-default">
+    <div style='background-color:#337ab7;'class="panel-heading" role="tab" id="headingOne">
+      <h4 class="panel-title">
+        <a class='collapsed'style='color:white;text-decoration:none;'role="button" data-toggle="collapse" data-parent="#accordion-comedian" href="#collapseComedian" aria-expanded="true" aria-controls="collapseOne">
+          {% if do_list_comedian %}Comedian ({{ do_list_comedian|length }}){% endif %}
+        </a>
+      </h4>
+    </div>
+    <div id="collapseComedian" style='background-color:#f4f4f4;border:none;'class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingOne">
+      <div class="panel-body">
+        {% for item in do_list_comedian %}
+
+
+         <div class="media">
+  <div class="media-left">
+   <a style='text-decoration:none;'href='#'>
+    {% for pic in item.1.userpicture_set.all %}          
+            {% if pic.image %}    
+              <img class='img-circle'src='{{ pic.image.url }}' width="50" height="50" />   
+            {% endif %}
+         {% endfor %}
+                          
+         {% if not item.1.userpicture_set.all %}
+        
+            <img class='img-circle' src='{% static "img/img_user_none.png" %}' width="50em" height="50em"  />
+                
+         {% endif %}
+    </a>
+  </div><!--media-left-->
+
+  <div class="media-body">
+   <a style='color:#385c7d;font-size:1.25em;text-decoration:none;'href='/{{ school.id }}/home/profile/{{ item.1.id }}/'>{{ item.1.first_name }} {{ item.1.last_name }}</a><br><p style='font-size:1em;color:grey;'>Offering:<i> {{ item.0 }}</i></p>
+
+  </div><!--media-body-->
+
+  <div class="media-right">
+   <a href='/{{ request.user.university.id }}/home/messaging/thread/{{ item.1.id }}/'><button class='btn btn-primary btn-lg'> Message </button></a>
+  </div><!--media-right-->
+</div><!--media-->
+
+
+    <hr >
+     {% endfor %} 
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+    
+ <!--end of dj-->
+
+     <!-- english accordian--> 
+     {% if do_list_english %}
+      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-default">
+    <div style='background-color:#337ab7;'class="panel-heading" role="tab" id="headingOne">
+      <h4 class="panel-title">
+        <a class='collapsed'style='color:white;text-decoration:none;'role="button" data-toggle="collapse" data-parent="#accordion-english" href="#collapseEnglish" aria-expanded="true" aria-controls="collapseOne">
+          {% if do_list_english %}English Tutoring ({{ do_list_english|length }}){% endif %}
+        </a>
+      </h4>
+    </div>
+    <div id="collapseEnglish" style='background-color:#f4f4f4;border:none;'class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingOne">
+      <div class="panel-body">
+        {% for item in do_list_english %}
+
+
+         <div class="media">
+  <div class="media-left">
+   <a style='text-decoration:none;'href='#'>
+    {% for pic in item.1.userpicture_set.all %}          
+            {% if pic.image %}    
+              <img class='img-circle'src='{{ pic.image.url }}' width="50" height="50" />   
+            {% endif %}
+         {% endfor %}
+                          
+         {% if not item.1.userpicture_set.all %}
+        
+            <img class='img-circle' src='{% static "img/img_user_none.png" %}' width="50em" height="50em"  />
+                
+         {% endif %}
+    </a>
+  </div><!--media-left-->
+
+  <div class="media-body">
+   <a style='color:#385c7d;font-size:1.25em;text-decoration:none;'href='/{{ school.id }}/home/profile/{{ item.1.id }}/'>{{ item.1.first_name }} {{ item.1.last_name }}</a><br><p style='font-size:1em;color:grey;'>Offering:<i> {{ item.0 }}</i></p>
+
+  </div><!--media-body-->
+
+  <div class="media-right">
+   <a href='/{{ request.user.university.id }}/home/messaging/thread/{{ item.1.id }}/'><button class='btn btn-primary btn-lg'> Message </button></a>
+  </div><!--media-right-->
+</div><!--media-->
+
+
+    <hr >
+     {% endfor %} 
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+    
+ <!--end of english-->
+
+      <!-- history accordian--> 
+     {% if do_list_history %}
+      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-default">
+    <div style='background-color:#337ab7;'class="panel-heading" role="tab" id="headingOne">
+      <h4 class="panel-title">
+        <a class='collapsed'style='color:white;text-decoration:none;'role="button" data-toggle="collapse" data-parent="#accordion-history" href="#collapseHistory" aria-expanded="true" aria-controls="collapseOne">
+          {% if do_list_history %}History Tutoring ({{ do_list_history|length }}){% endif %}
+        </a>
+      </h4>
+    </div>
+    <div id="collapseHistory" style='background-color:#f4f4f4;border:none;'class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingOne">
+      <div class="panel-body">
+        {% for item in do_list_history %}
+
+
+         <div class="media">
+  <div class="media-left">
+   <a style='text-decoration:none;'href='#'>
+    {% for pic in item.1.userpicture_set.all %}          
+            {% if pic.image %}    
+              <img class='img-circle'src='{{ pic.image.url }}' width="50" height="50" />   
+            {% endif %}
+         {% endfor %}
+                          
+         {% if not item.1.userpicture_set.all %}
+        
+            <img class='img-circle' src='{% static "img/img_user_none.png" %}' width="50em" height="50em"  />
+                
+         {% endif %}
+    </a>
+  </div><!--media-left-->
+
+  <div class="media-body">
+   <a style='color:#385c7d;font-size:1.25em;text-decoration:none;'href='/{{ school.id }}/home/profile/{{ item.1.id }}/'>{{ item.1.first_name }} {{ item.1.last_name }}</a><br><p style='font-size:1em;color:grey;'>Offering:<i> {{ item.0 }}</i></p>
+
+  </div><!--media-body-->
+
+  <div class="media-right">
+   <a href='/{{ request.user.university.id }}/home/messaging/thread/{{ item.1.id }}/'><button class='btn btn-primary btn-lg'> Message </button></a>
+  </div><!--media-right-->
+</div><!--media-->
+
+
+    <hr >
+     {% endfor %} 
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+    
+ <!--end of history-->
+
+      <!-- business accordian--> 
+     {% if do_list_business %}
+      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-default">
+    <div style='background-color:#337ab7;'class="panel-heading" role="tab" id="headingOne">
+      <h4 class="panel-title">
+        <a class='collapsed'style='color:white;text-decoration:none;'role="button" data-toggle="collapse" data-parent="#accordion-business" href="#collapseBusiness" aria-expanded="true" aria-controls="collapseOne">
+          {% if do_list_business %}Business Tutoring ({{ do_list_business|length }}){% endif %}
+        </a>
+      </h4>
+    </div>
+    <div id="collapseBusiness" style='background-color:#f4f4f4;border:none;'class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingOne">
+      <div class="panel-body">
+        {% for item in do_list_business %}
+
+
+         <div class="media">
+  <div class="media-left">
+   <a style='text-decoration:none;'href='#'>
+    {% for pic in item.1.userpicture_set.all %}          
+            {% if pic.image %}    
+              <img class='img-circle'src='{{ pic.image.url }}' width="50" height="50" />   
+            {% endif %}
+         {% endfor %}
+                          
+         {% if not item.1.userpicture_set.all %}
+        
+            <img class='img-circle' src='{% static "img/img_user_none.png" %}' width="50em" height="50em"  />
+                
+         {% endif %}
+    </a>
+  </div><!--media-left-->
+
+  <div class="media-body">
+   <a style='color:#385c7d;font-size:1.25em;text-decoration:none;'href='/{{ school.id }}/home/profile/{{ item.1.id }}/'>{{ item.1.first_name }} {{ item.1.last_name }}</a><br><p style='font-size:1em;color:grey;'>Offering:<i> {{ item.0 }}</i></p>
+
+  </div><!--media-body-->
+
+  <div class="media-right">
+   <a href='/{{ request.user.university.id }}/home/messaging/thread/{{ item.1.id }}/'><button class='btn btn-primary btn-lg'> Message </button></a>
+  </div><!--media-right-->
+</div><!--media-->
+
+
+    <hr >
+     {% endfor %} 
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+    
+ <!--end of business-->
+
+
+      <!-- math accordian--> 
+     {% if do_list_math %}
+      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-default">
+    <div style='background-color:#337ab7;'class="panel-heading" role="tab" id="headingOne">
+      <h4 class="panel-title">
+        <a class='collapsed'style='color:white;text-decoration:none;'role="button" data-toggle="collapse" data-parent="#accordion-math" href="#collapseMath" aria-expanded="true" aria-controls="collapseOne">
+          {% if do_list_math %}Math Tutoring ({{ do_list_math|length }}){% endif %}
+        </a>
+      </h4>
+    </div>
+    <div id="collapseMath" style='background-color:#f4f4f4;border:none;'class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingOne">
+      <div class="panel-body">
+        {% for item in do_list_math %}
+
+
+         <div class="media">
+  <div class="media-left">
+   <a style='text-decoration:none;'href='#'>
+    {% for pic in item.1.userpicture_set.all %}          
+            {% if pic.image %}    
+              <img class='img-circle'src='{{ pic.image.url }}' width="50" height="50" />   
+            {% endif %}
+         {% endfor %}
+                          
+         {% if not item.1.userpicture_set.all %}
+        
+            <img class='img-circle' src='{% static "img/img_user_none.png" %}' width="50em" height="50em"  />
+                
+         {% endif %}
+    </a>
+  </div><!--media-left-->
+
+  <div class="media-body">
+   <a style='color:#385c7d;font-size:1.25em;text-decoration:none;'href='/{{ school.id }}/home/profile/{{ item.1.id }}/'>{{ item.1.first_name }} {{ item.1.last_name }}</a><br><p style='font-size:1em;color:grey;'>Offering:<i> {{ item.0 }}</i></p>
+
+  </div><!--media-body-->
+
+  <div class="media-right">
+   <a href='/{{ request.user.university.id }}/home/messaging/thread/{{ item.1.id }}/'><button class='btn btn-primary btn-lg'> Message </button></a>
+  </div><!--media-right-->
+</div><!--media-->
+
+
+    <hr >
+     {% endfor %} 
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+    
+ <!--end of math-->
+
+       <!-- science accordian--> 
+     {% if do_list_science %}
+      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-default">
+    <div style='background-color:#337ab7;'class="panel-heading" role="tab" id="headingOne">
+      <h4 class="panel-title">
+        <a class='collapsed'style='color:white;text-decoration:none;'role="button" data-toggle="collapse" data-parent="#accordion-science" href="#collapseScience" aria-expanded="true" aria-controls="collapseOne">
+          {% if do_list_science %}Science Tutoring ({{ do_list_science|length }}){% endif %}
+        </a>
+      </h4>
+    </div>
+    <div id="collapseScience" style='background-color:#f4f4f4;border:none;'class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingOne">
+      <div class="panel-body">
+        {% for item in do_list_science %}
+
+
+         <div class="media">
+  <div class="media-left">
+   <a style='text-decoration:none;'href='#'>
+    {% for pic in item.1.userpicture_set.all %}          
+            {% if pic.image %}    
+              <img class='img-circle'src='{{ pic.image.url }}' width="50" height="50" />   
+            {% endif %}
+         {% endfor %}
+                          
+         {% if not item.1.userpicture_set.all %}
+        
+            <img class='img-circle' src='{% static "img/img_user_none.png" %}' width="50em" height="50em"  />
+                
+         {% endif %}
+    </a>
+  </div><!--media-left-->
+
+  <div class="media-body">
+   <a style='color:#385c7d;font-size:1.25em;text-decoration:none;'href='/{{ school.id }}/home/profile/{{ item.1.id }}/'>{{ item.1.first_name }} {{ item.1.last_name }}</a><br><p style='font-size:1em;color:grey;'>Offering:<i> {{ item.0 }}</i></p>
+
+  </div><!--media-body-->
+
+  <div class="media-right">
+   <a href='/{{ request.user.university.id }}/home/messaging/thread/{{ item.1.id }}/'><button class='btn btn-primary btn-lg'> Message </button></a>
+  </div><!--media-right-->
+</div><!--media-->
+
+
+    <hr >
+     {% endfor %} 
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+    
+ <!--end of science-->
+
+
+       <!-- IT accordian--> 
+     {% if do_list_it %}
+      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-default">
+    <div style='background-color:#337ab7;'class="panel-heading" role="tab" id="headingOne">
+      <h4 class="panel-title">
+        <a class='collapsed'style='color:white;text-decoration:none;'role="button" data-toggle="collapse" data-parent="#accordion-it" href="#collapseIT" aria-expanded="true" aria-controls="collapseOne">
+          {% if do_list_it %}I.T. Help ({{ do_list_it|length }}){% endif %}
+        </a>
+      </h4>
+    </div>
+    <div id="collapseIT" style='background-color:#f4f4f4;border:none;'class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingOne">
+      <div class="panel-body">
+        {% for item in do_list_it %}
+
+
+         <div class="media">
+  <div class="media-left">
+   <a style='text-decoration:none;'href='#'>
+    {% for pic in item.1.userpicture_set.all %}          
+            {% if pic.image %}    
+              <img class='img-circle'src='{{ pic.image.url }}' width="50" height="50" />   
+            {% endif %}
+         {% endfor %}
+                          
+         {% if not item.1.userpicture_set.all %}
+        
+            <img class='img-circle' src='{% static "img/img_user_none.png" %}' width="50em" height="50em"  />
+                
+         {% endif %}
+    </a>
+  </div><!--media-left-->
+
+  <div class="media-body">
+   <a style='color:#385c7d;font-size:1.25em;text-decoration:none;'href='/{{ school.id }}/home/profile/{{ item.1.id }}/'>{{ item.1.first_name }} {{ item.1.last_name }}</a><br><p style='font-size:1em;color:grey;'>Offering:<i> {{ item.0 }}</i></p>
+
+  </div><!--media-body-->
+
+  <div class="media-right">
+   <a href='/{{ request.user.university.id }}/home/messaging/thread/{{ item.1.id }}/'><button class='btn btn-primary btn-lg'> Message </button></a>
+  </div><!--media-right-->
+</div><!--media-->
+
+
+    <hr >
+     {% endfor %} 
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+    
+ <!--end of it-->
+
+        <!-- Odd Jobs accordian--> 
+     {% if do_list_odd %}
+      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-default">
+    <div style='background-color:#337ab7;'class="panel-heading" role="tab" id="headingOne">
+      <h4 class="panel-title">
+        <a class='collapsed'style='color:white;text-decoration:none;'role="button" data-toggle="collapse" data-parent="#accordion-odd" href="#collapseOdd" aria-expanded="true" aria-controls="collapseOne">
+          {% if do_list_odd %}Odd Jobs ({{ do_list_odd|length }}){% endif %}
+        </a>
+      </h4>
+    </div>
+    <div id="collapseOdd" style='background-color:#f4f4f4;border:none;'class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingOne">
+      <div class="panel-body">
+        {% for item in do_list_odd %}
+
+
+         <div class="media">
+  <div class="media-left">
+   <a style='text-decoration:none;'href='#'>
+    {% for pic in item.1.userpicture_set.all %}          
+            {% if pic.image %}    
+              <img class='img-circle'src='{{ pic.image.url }}' width="50" height="50" />   
+            {% endif %}
+         {% endfor %}
+                          
+         {% if not item.1.userpicture_set.all %}
+        
+            <img class='img-circle' src='{% static "img/img_user_none.png" %}' width="50em" height="50em"  />
+                
+         {% endif %}
+    </a>
+  </div><!--media-left-->
+
+  <div class="media-body">
+   <a style='color:#385c7d;font-size:1.25em;text-decoration:none;'href='/{{ school.id }}/home/profile/{{ item.1.id }}/'>{{ item.1.first_name }} {{ item.1.last_name }}</a><br><p style='font-size:1em;color:grey;'>Offering:<i> {{ item.0 }}</i></p>
+
+  </div><!--media-body-->
+
+  <div class="media-right">
+   <a href='/{{ request.user.university.id }}/home/messaging/thread/{{ item.1.id }}/'><button class='btn btn-primary btn-lg'> Message </button></a>
+  </div><!--media-right-->
+</div><!--media-->
+
+
+    <hr >
+     {% endfor %} 
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+    
+ <!--end of it-->
+
+ </div>
+
+<div style='background-color:#DFDFDF;padding:2em; 'class='well col-lg-6 col-md-6 col-sm-12 col-xs-12'>
+
+         <div id='want-service-check' >
+         	<div class='col-lg-6'>
+         		
+            <form id='want-service' method='POST' action='/want_service/{{ request.user.id }}/'> {% csrf_token %}
+    	<b style='font-size:1.25em;color:#385c7d;'><i>Professional Services</i></b>
+        <div class="checkbox">
+		  <label><input name='want-check' value='Athletic Trainer' class='want-check' id='athletictrainer' type="checkbox" value="">Athletic Trainer</label>
+		</div>
+
+        <div class="checkbox">
+		  <label><input name='want-check' value='Bartender' class='want-check' id='bartender' type="checkbox" value="">Bartender</label>
+		</div>
+
+		<div class="checkbox">
+		  <label><input name='want-check' value='Chef' class='want-check' id='chef' type="checkbox" value="">Chef</label>
+		</div>
+
+		<div class="checkbox">
+		  <label><input name='want-check' value='Driver' class='want-check' id='driver' type="checkbox" value="">Driver</label>
+		</div>
+
+		<div class="checkbox">
+		  <label><input name='want-check' value='Delivery Driver' class='want-check' id='deliverydriver'type="checkbox" value="">Delivery Driver</label>
+		</div>
+		<b style='font-size:1.25em;color:#385c7d;'><i>Dorm Maintenance</i></b>
+				
+
+		        <div class="checkbox">
+		  			<label><input name='want-check' value='Cleaning' class='want-check' id='cleaning' type="checkbox" value="">Cleaning</label>
+				</div>
+				<div class="checkbox">
+		  			<label><input name='want-check' value='Laundry' class='want-check' id='laundry' type="checkbox" value="">Laundry</label>
+				</div>
+				<div class="checkbox">
+				  <label><input name='want-check' value='Interior Designer' class='want-check' id='interiordesigner' type="checkbox" value="">Interior Designer</label>
+				</div>
+				<div class="checkbox">
+		  			<label><input name='want-check' value='Moving' class='want-check' id='moving' type="checkbox" value="">Moving</label>
+				</div>
+				
+				
+		
+		
+		
+
+		<b style='font-size:1.25em;color:#385c7d;'><i>Entertainment</i></b>
+			
+			
+			<div class="checkbox">
+			  <label><input name='want-check' value='Musician' class='want-check' id='musician' type="checkbox" value="">Musician</label>
+			</div>
+			<div class="checkbox">
+		  <label><input name='want-check' value='D.J.' class='want-check' id='dj' type="checkbox" value="">D.J.</label>
+		</div>
+		<div class="checkbox">
+			  <label><input name='want-check' value='Comedian' class='want-check' id='comedian' type="checkbox" value="">Comedian</label>
+			</div>
+
+		</div><!--col-->
+	<div class='col-lg-6'>
+		
+
+		
+		<b style='font-size:1.25em;color:#385c7d;'><i>Tutoring/Education</i></b>
+	
+				
+				<div class="checkbox">
+				  <label><input name='want-check' value='English'class='want-check' id='english' type="checkbox" value="">English</label>
+				</div>
+				<div class="checkbox">
+				  <label><input name='want-check' value='History' class='want-check' id='history' type="checkbox" value="">History</label>
+				</div>
+				<div class="checkbox">
+				  <label><input name='want-check' value='Business' class='want-check' id='business' type="checkbox" value="">Business</label>
+				</div>
+				<div class="checkbox">
+				  <label><input name='want-check' value='Math' class='want-check' id='math' type="checkbox" value="">Math</label>
+				</div>
+				<div class="checkbox">
+				  <label><input name='want-check' value='Science' class='want-check' id='science'type="checkbox" value="">Science</label>
+				</div>
+				<div class="checkbox">
+		  <label><input name='want-check' value='I.T. Help' class='want-check' id='ithelp' type="checkbox" value="">I.T. Help</label>
+		</div>
+<b style='font-size:1.25em;color:#385c7d;'><i>Other</i></b>
+		<div class="checkbox">
+	  <label><input name='want-check' value='Odd Jobs' class='want-check' id='oddjobs' type="checkbox" value="">Odd Jobs</label>
+	</div>
+		
+			
+		</div><!--col-lg-6-->
+		
+		<div style='text-align:center;'class='col-lg-12'>
+			<br>
+        <input style='width:75%;'class='btn btn-primary btn-lg' type='submit' value='Update Services I Need'/>
+
+    </div>
+        </form>
+    
+
+       
+	</div><!--want-service-check-->
+</div><!--col-->
+
+
+</div><!--col-->
+
+</div><!--providers-->
+</div><!--row-->
+</div><!--container-->
+
+<!--javascript-->
+<script>
+
+var wantCheckList = {{ json_want_list|safe }};
+var wantCheckListLength = wantCheckList.length; 
+if(wantCheckList != false){
+
+  for (i=0; i<wantCheckListLength; i++){
+  	$('.want-check#'+wantCheckList[i].toLowerCase().replace(/ /g,'').replace(/\./g,'')).prop('checked', true);
+    }
+}
+
+
+$('').prop('checked', true);
+
+$('form').live('submit', function(event) {
+
+    event.preventDefault();
+    
+    var $form = $(this);
+    var id = $form.attr('id');
+    var formData = $form.serialize();
+
+if ($form.attr("id") == "navSearchForm"){
+  
+  this.submit();
+      
+}
+
+if ($form.attr("id") == "topSearchForm"){
+  
+  this.submit();     
+
+}
+
+
+if ($form.attr("id") == "do-service"){
+    
+    
+    $.ajax({
+        type:'POST',
+        url: "/do_service/"+{{ request.user.id }}+"/",
+        dataType: "json",
+        data:formData,
+        
+        
+        
+        success: function (json) {
+          
+
+            window.location.reload();
+
+        },
+        error: function(data) {
+          $(".syl-error").html("All fields are required. Make sure your date is actually a DATE!").fadeIn(2000).fadeOut(6000);
+            
+        }
+    });
+    }  
+
+   if ($form.attr("id") == "want-service"){
+    
+    
+    $.ajax({
+        type:'POST',
+        url: "/want_service/"+{{ request.user.id }}+"/",
+        dataType: "json",
+        data:formData,
+        
+        
+        
+        success: function (json) {
+          
+
+            window.location.reload();
+
+        },
+        error: function(data) {
+          $(".syl-error").html("All fields are required. Make sure your date is actually a DATE!").fadeIn(2000).fadeOut(6000);
+            
+        }
+    });
+    } 
+});
+
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+var csrftoken = getCookie('csrftoken');
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+
+}
+
+function sameOrigin(url) {
+    // test that a given url is a same-origin URL
+    // url could be relative or scheme relative or absolute
+    var host = document.location.host; // host + port
+    var protocol = document.location.protocol;
+    var sr_origin = '//' + host;
+    var origin = protocol + sr_origin;
+    // Allow absolute or scheme relative URLs to same origin
+    return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+        (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+        // or any other URL that isn't scheme relative or absolute i.e relative.
+        !(/^(\/\/|http:|https:).*/.test(url));
+}
+
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+            // Send the token to same-origin, relative URLs only.
+            // Send the token only if the method warrants CSRF protection
+            // Using the CSRFToken value acquired earlier
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+
+</script>
+{% endblock %}

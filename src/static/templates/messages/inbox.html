@@ -1,0 +1,769 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+<script>
+{% block jquery %}
+
+$('#matches-link').click(function(e){
+  e.preventDefault();
+  $("#newest").hide();
+  $("#textbook").hide();
+  $("#other").hide();
+  $("#housing").hide();
+  $("#room").hide();
+  $("#tutor").hide();
+  $("#electronic").hide();
+  $("#apparel").hide();
+  $("#search-results").hide();
+  $('#matches').fadeToggle();
+  //$(this).next('.about-me').fadeToggle();
+})
+$('#newest-link').click(function(e){
+  e.preventDefault();
+  $("#matches").hide();
+  $("#textbook").hide();
+  $("#other").hide();
+  $("#housing").hide();
+  $("#room").hide();
+  $("#tutor").hide();
+  $("#electronic").hide();
+  $("#apparel").hide();
+  $("#search-results").hide();
+  $('#newest').fadeToggle();
+  //$(this).next('.about-me').fadeToggle();
+})
+
+$('#textbook-link').click(function(e){
+  e.preventDefault();
+  $("#matches").hide();
+  $("#newest").hide();
+  $("#other").hide();
+  $("#housing").hide();
+  $("#room").hide();
+  $("#tutor").hide();
+  $("#electronic").hide();
+  $("#apparel").hide();
+  $("#search-results").hide();
+  $('#textbook').fadeToggle();
+  //$(this).next('.about-me').fadeToggle();Messages
+})
+
+$('#apparel-link').click(function(e){
+  e.preventDefault();
+  $("#matches").hide();
+  $("#newest").hide();
+  $("#other").hide();
+  $("#housing").hide();
+  $("#room").hide();
+  $("#tutor").hide();
+  $("#electronic").hide();
+  $("#textbook").hide();
+  $("#search-results").hide();
+  $('#apparel').fadeToggle();
+  //$(this).next('.about-me').fadeToggle();
+})
+
+$('#other-link').click(function(e){
+  e.preventDefault();
+  $("#matches").hide();
+  $("#newest").hide();
+  $("#textbook").hide();
+  $("#housing").hide();
+  $("#room").hide();
+  $("#tutor").hide();
+  $("#electronic").hide();
+  $("#apparel").hide();
+  $("#search-results").hide();
+  $('#other').fadeToggle();
+  //$(this).next('.about-me').fadeToggle();
+})
+$('#electronic-link').click(function(e){
+  e.preventDefault();
+  $("#matches").hide();
+  $("#newest").hide();
+  $("#textbook").hide();
+  $("#housing").hide();
+  $("#room").hide();
+  $("#tutor").hide();
+  $("#other").hide();
+  $("#apparel").hide();
+  $("#search-results").hide();
+  $('#electronic').fadeToggle();
+  //$(this).next('.about-me').fadeToggle();
+})
+$('#room-link').click(function(e){
+  e.preventDefault();
+  $("#matches").hide();
+  $("#newest").hide();
+  $("#textbook").hide();
+  $("#housing").hide();
+  $("#electronic").hide();
+  $("#tutor").hide();
+  $("#other").hide();
+  $("#apparel").hide();
+  $("#search-results").hide();
+  $('#room').fadeToggle();
+  //$(this).next('.about-me').fadeToggle();
+})
+$('#tutor-link').click(function(e){
+  e.preventDefault();
+  $("#matches").hide();
+  $("#newest").hide();
+  $("#textbook").hide();
+  $("#housing").hide();
+  $("#electronic").hide();
+  $("#room").hide();
+  $("#other").hide();
+  $("#apparel").hide();
+  $("#search-results").hide();
+  $('#tutor').fadeToggle();
+  //$(this).next('.about-me').fadeToggle();
+})
+$('#housing-link').click(function(e){
+  e.preventDefault();
+  $("#matches").hide();
+  $("#newest").hide();
+  $("#textbook").hide();
+  $("#tutor").hide();
+  $("#electronic").hide();
+  $("#room").hide();
+  $("#other").hide();
+  $("#apparel").hide();
+  $("#search-results").hide();
+  $('#housing').fadeToggle();
+  //$(this).next('.about-me').fadeToggle();
+})
+
+
+{% endblock %}
+</script>
+{% block content %}
+
+<style>
+.left-inner-addon {
+    position: relative;
+}
+.left-inner-addon input {
+    padding-left: 22px;    
+}
+.left-inner-addon span {
+    position: absolute;
+    padding: 7px 12px;
+    pointer-events: none;
+}
+
+.right-inner-addon {
+    position: relative;
+}
+.right-inner-addon input {
+    padding-right: 30px;    
+}
+.right-inner-addon span {
+    position: absolute;
+    right: 0px;
+    padding: 7px 12px;
+    pointer-events: none;
+}
+
+#main{
+	padding-top:75px;
+}
+
+#list{
+  padding-top:0px;
+  padding-bottom:0px;
+  background-color:#E0E0E0;
+}
+#newest{
+	display:none;
+}
+#other{
+	display:none;
+}
+#housing{
+	display:none;
+}
+#apparel{
+  display:none;
+}
+#textbook{
+  display:none;
+}
+#room{
+	display:none;
+}
+#tutor{
+	display:none;
+}
+#electronic{
+	display:none;
+}
+.container{
+	
+}
+</style>
+
+
+<div class="container" id="main">
+	<div class="row">
+
+		<div class="col-md-2 col-sm-8">
+        <div class="panel panel-default">
+          
+   			<div class="panel-body">
+   				<div id='add_product_success'></div>
+   				 <h4><a data-toggle="modal" data-target="#myModalProfile" class='user_profile' id='{{ request.user.id }}' href='#'>{{ request.user.first_name }} {{ request.user.last_name }}</a></h4>
+                
+                  <a href='/matching-profile/{{ request.user.id }}'><h6>Market Match</h6></a>
+                  
+                  <a href='/messages/'><h6>Messages <span class="badge badge-notify" id='notifyCount'>0</span></h6></a>
+                  <a href='#' data-toggle="modal" data-target="#myModalProduct"><h6>Add Product/Service</h6></a>
+
+
+   			</div>
+	   </div>
+
+
+	   
+   	
+
+
+	   </div>
+<div class="modal fade" id="myModalCourse" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Add Courses</h4>
+                  </div>
+                  <div class="modal-body">
+                  	<h4>Courses:</h4>
+                  	{% for item in courses %}
+                  		<h5>{{ item.course_name }} - {{ item.semester }}</h5>
+                  	{% endfor %}
+                  	<div id='course-list'></div>
+                    <form id='add_course' method='POST' action='/add_course/' enctype='multipart/form-data'> {% csrf_token %}
+                    <div style='color:red' id='add_course_error'>
+                    </div>
+                    
+                   
+                {% crispy course_form %}
+                
+            </form>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+<div class="modal fade" id="myModalProduct" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Add Product/Service</h4>
+                  </div>
+                  <div class="modal-body">
+
+                    <form id='add_product' method='POST' action='' name='example' enctype='multipart/form-data'> {% csrf_token %}
+
+                      <div style='color:red' id='add_product_error'>
+                      </div>
+
+                      
+                        <div class='row'>
+                          <div class='col-lg-5'>
+                            <label for="category" >What are you selling?</label>
+                              <select name='category' class="form-control" id="category">
+                                <option>Textbooks</option>
+                                <option>Apparel</option>
+                                <option>Electronics</option>
+                                <option>Furniture</option>
+                                <option>Sublet</option>
+                                <option>Tutors</option>
+                                <option>Other</option>
+                              </select>
+                              <br>
+                            <label for="condition">Condition:</label>
+                          <select name='condition' class="form-control" id="condition">
+                                <option>New</option>
+                                <option>Used</option>
+                                
+                              </select>
+                          <br>
+                            <label for="image">Photo:</label>
+                            <input class='form-control clearablefileinput'  type='file'  name='image'  id='image'>
+                          
+                          </div>
+
+                          <div class='col-lg-7'>
+                            <label for="title">Title:</label>
+                            <input type='text' class='form-control' name='title'  id='title'>
+                            <br>
+                             <label for="price">Price:</label>
+                             <div class="left-inner-addon">
+                                <span>$</span>
+                                <input type="text" class="form-control" name='price' id='price' />
+                            </div>
+                          </div>
+
+                          <div class='col-lg-12'>
+                            <br>
+                            <label for="description">Description</label>
+  <textarea class="form-control" rows="5" name='description' id="description"></textarea>
+  <br>
+                          </div>
+
+                        
+
+                      </div><!--div class row-->
+
+                      <div style='text-align:center;'>
+                      <button  class='btn btn-primary btn-lg' type='submit'>List It</button>
+                    </div>
+                    </form>
+
+
+                    
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+
+  <div class="modal fade" id="myModalMessage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Message</h4>
+                  </div>
+                  <div class="modal-body">
+                    <div id='user_name'></div>
+                    <br>
+                    
+                     <div id='user_form'></div>
+      			  </div>
+      
+    </div>
+  </div>
+</div>    
+
+
+            
+	<div style='padding-right:0px;'class="col-md-3 col-sm-8">
+    <div class="panel panel-default">
+		<div style='height:500px;' class="panel-body">
+			<h4>All Messages</h4>
+			<hr>
+      {% if not send_id_list %}
+      You have no messages
+      {% endif %}
+		  {% for sender in send_id_list %}
+
+      <a href='#' class='click-sender' id='{{ sender.1 }}'> {{ sender.0 }}</a><br><hr>
+
+      {% endfor %}
+		</div><!--panel-body-->
+
+	</div><!--panel default-->
+	
+	</div>
+  <div style='padding-left:0px;'class="col-md-4 col-sm-8">
+  <div id='message_results'>
+
+    <div class="panel panel-default">
+    <div id='convo'style='overflow:auto;height:400px;' class="panel-body">
+      
+      {% for item in message_convo %}
+      
+        {% if not item.3 == 'You' %}
+        
+        <li style="padding-right: 40%;list-style-type: none;" class='text-left '><div style="padding-right: 2px;" class='well'><small>{{ item.1 }}</small> - <small>{{ item.0|timesince }}</small></div></li> 
+       
+        {% else %}
+        
+        <li style="padding-left: 40%; list-style-type: none;" class='text-right '><div style="background-color:#909DD4;padding-left: 2px;"class='well'><small>{{ item.1 }}</small> - <small>{{ item.0|timesince }}</small></div></li> 
+      
+        {% endif %}
+      
+
+      
+       
+      {% endfor %}
+      
+      <div id='ajax-message'></div>
+  
+    </div><!--panel-body-->
+
+   
+      
+<div style='height:100px;' class="panel-body">
+  <br>
+
+<form id='user_compose_{{ user.id }}' method='POST' action='' name='example' enctype='multipart/form-data'> {% csrf_token %}
+
+<input type='hidden' value='{{ user.id }}' name='id'>
+  <div class='input-group'>
+ <div style='overflow: hidden; padding-left: .5em;'>
+  <textarea  class='form-control' name='body'style='resize: none;height:46px;' placeholder='Compose Message...' id='comment'></textarea>
+</div>
+  <span class='input-group-btn'><button style='text-align:center;' class='btn btn-primary btn-lg' type='submit'>Send</button></span></div>
+
+</form>
+
+
+            
+                
+              
+            
+
+    </div><!--panel-body-->
+  </div><!--panel default-->
+
+
+
+  </div>
+
+</div>
+
+  
+
+	
+
+
+
+	</div><!--div row-->
+</div><!--main-->
+
+<script>
+
+
+
+
+
+$('#myModalCourse').on('hidden.bs.modal', function () {
+document.location.reload();
+})
+
+$('#tour-link').click(function(e){
+  
+var tour = new Tour({
+  steps: [
+  
+  {
+    
+    title: "Welcome!",
+    content: "Welcome to the U-Marketplace! Here's a quick tour.",
+    backdrop: true,
+    orphan: true,
+  },
+  {
+    element: "#selling",
+    title: "What your selling.",
+    content: "This is where you can find what you're currently selling.",
+    backdrop: true,
+    placement: 'right',
+  },
+  {
+    element: "#sold",
+    title: "What you've sold.",
+    content: "This is where you can find what you've sold.",
+    backdrop: true,
+    placement: 'right',
+  },
+
+  {
+    element: "#sell-button",
+    title: "Sell a Product or Service.",
+    content: "Click the 'sell product' button to sell a product or service within your school.Make sure to fill out all the information including picture to draw interest.",
+    backdrop: true,
+    placement: 'bottom',
+  },
+
+  {
+    element: "#search",
+    title: "Search products.",
+    content: "Search any product that you're looking to buy, and express interest in product by messaging the owner. Find a method to pay for it and pick it up by messaging each other!",
+    backdrop: true,
+    placement: 'bottom',
+  },
+
+   {
+    element: "#list-items",
+    title: "Mark as sold",
+    content: "If you are the seller and have sold it or want to take down the listing, you can mark your product “sold,” which is found next to the listing.",
+    backdrop: true,
+    placement: 'right',
+  },
+  
+
+
+  
+  
+]});
+
+// Initialize the tour
+tour.init();
+
+// Start the tour
+tour.start();
+tour.restart();
+});
+$(function(){
+  $('.click-sender').click(function(){
+    var sender_id = $(this).attr('id');
+    $.ajax({
+      type: "GET",
+      url:"/message_ajax/",
+      data: {
+        'sender_mess_id' : sender_id,
+        
+
+      },
+      success: messageSuccess,
+      dataType: 'html'
+    });
+  });
+});
+
+function messageSuccess(data, textStatus, jqXHR)
+{
+  $('#message_results').html(data);
+  
+  $('#message_results').show();
+  
+}
+
+
+
+$('form').live('submit', function(event) {
+
+    event.preventDefault();
+    
+    var $form = $(this);
+    var id = $form.attr('id');
+    var formData = $form.serialize();
+    
+if ($(this).attr('id').indexOf('user_compose') > -1 ){
+    
+    
+    $.ajax({
+        type:'POST',
+        url: "/compose_message/",
+        dataType: "json",
+        data:formData,
+        
+        
+        
+        success: function (json) {
+          
+           
+          var id = json.user_id;
+             
+         	$("#ajax-message").append("<li style='padding-left: 40%; list-style-type: none;' class='text-right '><div style='background-color:#909DD4;padding-left: 2px;'class='well'><small>"+json.body+"</small> - <small>"+json.sent+"</small></div></li>");
+            
+            $('#convo').animate({scrollTop: $('#convo').prop("scrollHeight")});
+            $('#user_compose_'+id)[0].reset()
+           
+           
+
+        },
+        error: function(data) {
+          $(".syl-error").html("All fields are required. Make sure your date is actually a DATE!").fadeIn(2000).fadeOut(6000);
+            
+        }
+    });
+    }
+    if ($(this).attr('id').indexOf('message') > -1 ){
+    
+    
+    $.ajax({
+        type:'GET',
+        url: "/message_user_id_ajax/ajax/",
+        dataType: "json",
+        data:formData,
+        
+        
+        
+        success: function (json) {
+          
+           
+            
+             
+           $('#myModalMessage').modal('show');
+            
+            $('#user_name').html("To: "+json.user+"");
+            $('#user_form').html("<form id='user_compose_"+json.user_id+"' method='POST' action='' name='example' enctype='multipart/form-data'> {% csrf_token %}<div class='col-lg-12 input-group'><input name='subject' type='text' class='form-control' placeholder='Subject'><br><br><textarea class='form-control' name='body' rows='8' placeholder='Compose Message...' id='comment'></textarea><button class='btn btn-primary' type='submit'>Post</button><input type='hidden' value='"+json.user_id+"' name='id'></div></form>");
+            
+
+            
+              
+              
+        
+            
+            
+           
+           
+
+        },
+        error: function(data) {
+          $(".syl-error").html("All fields are required. Make sure your date is actually a DATE!").fadeIn(2000).fadeOut(6000);
+            
+        }
+    });
+    }
+
+    if ($form.attr("id") == "add_course"){
+    
+    
+    $.ajax({
+        type:'POST',
+        url: "/add_course/",
+        dataType: "json",
+        data:formData,
+        
+        
+        
+        success: function (json) {
+          var $response = json.response
+            if ($response){  
+            
+                
+                $("#course-list").append($("<h5>"+json.course_name+" - "+json.semester+"</h5>"));
+                
+                $('#add_course')[0].reset();
+            
+             }
+            else{
+              $("#add_product_error").html($("<div class='alert alert-danger' role='alert'>Image is optional. Please fill out the rest of the fields.</div></p>")).fadeIn(2000).fadeOut(6000);
+                $('#add_product')[0].reset();
+            }
+
+        },
+        error: function(data) {
+          $(".syl-error").html("All fields are required. Make sure your date is actually a DATE!").fadeIn(2000).fadeOut(6000);
+            
+        }
+    });
+    }  
+
+    if ($form.attr("id") == "add_product"){
+    
+    var formData = new FormData(this);
+    $.ajax({
+        type:'POST',
+        url: "/add_product/"+{{ request.user.university.id }}+"/",
+        data:formData,
+        cache:false,
+        contentType: false,
+        processData: false,
+        
+        
+        success: function (json) {
+          var $response = json.response
+            if ($response){  
+            
+                $('#myModalProduct').modal('hide');
+                $("#add_product_success").html($("<div class='alert alert-success' role='alert'>Successfully added new product!</div>")).fadeIn(2000).fadeOut(6000);
+                document.location.reload();
+                $('#add_product')[0].reset();
+            
+             }
+            else{
+              $("#add_product_error").html($("<div class='alert alert-danger' role='alert'>Image is optional. Please fill out the rest of the fields.</div></p>")).fadeIn(2000).fadeOut(6000);
+                $('#add_product')[0].reset();
+            }
+
+        },
+        error: function(data) {
+          $(".syl-error").html("All fields are required. Make sure your date is actually a DATE!").fadeIn(2000).fadeOut(6000);
+            
+        }
+    });
+    }
+    
+    if ($form.attr("id") == "sold"){
+    
+    $.ajax({
+        type: "POST",
+        url: "/sold/",
+        dataType: "json",
+        data: formData,
+        
+        
+        success: function (json) {
+          
+            console.log(json.id)
+            $('#textbook_'+ json.id).hide();
+            $('#housing_'+ json.id).hide();
+            $('#electronic_'+ json.id).hide();
+            $('#room_'+ json.id).hide();
+            $('#other_'+ json.id).hide();
+            $('#tutor_'+ json.id).hide();
+
+            
+            
+            
+        },
+        error: function(data) {
+          $(".syl-error").html("All fields are required. Make sure your date is actually a DATE!").fadeIn(2000).fadeOut(6000);
+            
+        }
+    });
+    }
+
+
+});
+
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+var csrftoken = getCookie('csrftoken');
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+
+}
+
+function sameOrigin(url) {
+    // test that a given url is a same-origin URL
+    // url could be relative or scheme relative or absolute
+    var host = document.location.host; // host + port
+    var protocol = document.location.protocol;
+    var sr_origin = '//' + host;
+    var origin = protocol + sr_origin;
+    // Allow absolute or scheme relative URLs to same origin
+    return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+        (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+        // or any other URL that isn't scheme relative or absolute i.e relative.
+        !(/^(\/\/|http:|https:).*/.test(url));
+}
+
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+            // Send the token to same-origin, relative URLs only.
+            // Send the token only if the method warrants CSRF protection
+            // Using the CSRFToken value acquired earlier
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+
+</script>
+
+{% endblock %}
